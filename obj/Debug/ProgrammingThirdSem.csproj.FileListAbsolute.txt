@@ -1,0 +1,15 @@
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.csproj.AssemblyReference.cache
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\MainWindow.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\App.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem_MarkupCompile.cache
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem_MarkupCompile.lref
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.exe
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.pdb
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\ProgrammingThirdSem.exe.config
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\ProgrammingThirdSem.exe
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\ProgrammingThirdSem.pdb
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\MainWindow.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.g.resources
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.Properties.Resources.resources
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.csproj.GenerateResource.cache
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.csproj.CoreCompileInputs.cache
