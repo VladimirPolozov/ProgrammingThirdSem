@@ -74,11 +74,6 @@
     <Compile Include="Ales\Views\AlesView.xaml.cs">
       <DependentUpon>AlesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Integral\Models\IntegralModel.cs" />
-    <Compile Include="Integral\ViewModels\IntegralViewModel.cs" />
-    <Compile Include="Integral\Views\IntegralView.xaml.cs">
-      <DependentUpon>IntegralView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Lsm\Models\LsmModel.cs" />
     <Compile Include="Lsm\ViewModels\LsmViewModel.cs" />
     <Compile Include="Lsm\Views\LsmView.xaml.cs">
@@ -101,7 +96,6 @@
       <DependentUpon>SortingView.xaml</DependentUpon>
     </Compile>
     <Page Include="Ales\Views\AlesView.xaml" />
-    <Page Include="Integral\Views\IntegralView.xaml" />
     <Page Include="Lsm\Views\LsmView.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

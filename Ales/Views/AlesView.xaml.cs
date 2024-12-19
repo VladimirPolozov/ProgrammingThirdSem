@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using ProgrammingThirdSem.Ales.ViewModels;
 
-namespace ProgrammingThirdSem.ALES.Views
+namespace ProgrammingThirdSem.Ales.Views
 {
     public partial class AlesView : UserControl
     {

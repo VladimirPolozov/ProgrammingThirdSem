@@ -17,10 +17,14 @@
       <Grid Margin="0 0 0 24px">
         <Grid.RowDefinitions>
           <RowDefinition Height="50px"/>
-          <RowDefinition Height="50px"/>
-          <RowDefinition Height="50px"/>
-          <RowDefinition Height="50px"/>
-          <RowDefinition Height="50px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="36px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -28,10 +32,10 @@
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">Метод</TextBlock>
-        <CheckBox Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" Content="Дихотомии" FontFamily="Montserrat" IsChecked="{Binding IsDihotomyMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-        <CheckBox Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" Content="Золотого сечения" FontFamily="Montserrat" IsChecked="{Binding IsGoldenRatioMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-        <CheckBox Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Center" Content="Ньютона" FontFamily="Montserrat" IsChecked="{Binding IsNewtonMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-        <CheckBox Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Center" Content="Покоординатного спуска" FontFamily="Montserrat" IsChecked="{Binding IsCoordinateDescentMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        <CheckBox Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" Content="Дихотомии" FontFamily="Montserrat" IsChecked="{Binding IsDihotomyMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" Content="Золотого сечения" FontFamily="Montserrat" IsChecked="{Binding IsGoldenRatioMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Center" Content="Ньютона" FontFamily="Montserrat" IsChecked="{Binding IsNewtonMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Center" Content="Покоординатного спуска" FontFamily="Montserrat" IsChecked="{Binding IsCoordinateDescentMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Grid.Column="1" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">Результат</TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding DihotomyMethodResult}"/>
         <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding GoldenRationMethodResult}"/>
@@ -42,6 +46,20 @@
         <Button Grid.Column="2" Grid.Row="2" Content="Открыть" Command="{Binding GoldenRatioShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="3" Content="Открыть" Command="{Binding NewtonShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="4" Content="Открыть" Command="{Binding CoordinateDescentShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <StackPanel Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0 4 0 0">
+          <RadioButton Margin="0 0 12px 0" Content="мин." FontFamily="Montserrat" FontSize="12" IsChecked="{Binding IsAscendingSortChecked, UpdateSourceTrigger=PropertyChanged}"/>
+          <RadioButton Margin="0 0 12px 0" Content="макс." FontFamily="Montserrat" FontSize="12"/>
+          <RadioButton Content="нуль" FontFamily="Montserrat" FontSize="12"/>
+        </StackPanel>
+        <CheckBox Grid.Column="0" Grid.Row="6" VerticalContentAlignment="Center" Content="Прямоугольников" FontFamily="Montserrat" IsChecked="{Binding IsRectangleMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="7" VerticalContentAlignment="Center" Content="Трапеций" FontFamily="Montserrat" IsChecked="{Binding IsTrapezoidMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        <CheckBox Grid.Column="0" Grid.Row="8" VerticalContentAlignment="Center" Content="Парабол" FontFamily="Montserrat" IsChecked="{Binding IsParabolaMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        <TextBlock Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding RectangleMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding TrapezoidMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="8" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding ParabolaMethodResult}"/>
+        <Button Grid.Column="2" Grid.Row="6" Content="Открыть" Command="{Binding RectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="7" Content="Открыть" Command="{Binding TrapezoidShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="8" Content="Открыть" Command="{Binding ShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
       </Grid>
       <Grid>
         <Grid.ColumnDefinitions>
@@ -53,7 +71,7 @@
           <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 24 0">
-          <TextBlock Margin="0 0 0 5px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Формула</TextBlock>
+          <TextBlock Margin="0 0 0 5px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Функция</TextBlock>
           <TextBox Margin="0 21 0 0px" Padding="4 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding FunctionExpression, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gainsboro"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1">

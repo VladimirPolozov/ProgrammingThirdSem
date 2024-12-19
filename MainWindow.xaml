@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:ProgrammingThirdSem"
         xmlns:views="clr-namespace:ProgrammingThirdSem.Sorting.Views"
         xmlns:views1="clr-namespace:ProgrammingThirdSem.NumericalMethods.Views"
-        xmlns:views2="clr-namespace:ProgrammingThirdSem.Integral.Views"
-        xmlns:views3="clr-namespace:ProgrammingThirdSem.ALES.Views"
+        xmlns:views3="clr-namespace:ProgrammingThirdSem.Ales.Views"
         xmlns:views4="clr-namespace:ProgrammingThirdSem.Lsm.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="800">
@@ -18,9 +17,6 @@
       </TabItem>
       <TabItem Header="Сортировки" Padding="16px 8px" FontSize="11px">
         <views:SortingView></views:SortingView>
-      </TabItem>
-      <TabItem Header="Интеграл" Padding="16px 8px" FontSize="11px">
-        <views2:IntegralView></views2:IntegralView>
       </TabItem>
       <TabItem Header="СЛАУ" Padding="16px 8px" FontSize="11px">
         <views3:AlesView></views3:AlesView>
