@@ -55,10 +55,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IntegralView.xaml.cs">
+      <DependentUpon>IntegralView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LSMView.xaml.cs">
+      <DependentUpon>LSMView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SortingView.xaml.cs">
+      <DependentUpon>SortingView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ALESView.xaml" />
+    <Page Include="IntegralView.xaml" />
+    <Page Include="LSMView.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="ALESView.xaml.cs">
+      <DependentUpon>ALESView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -67,8 +82,13 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NumericalMethodsView.xaml" />
+    <Page Include="SortingView.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NumericalMethodsView.xaml.cs">
+      <DependentUpon>NumericalMethodsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

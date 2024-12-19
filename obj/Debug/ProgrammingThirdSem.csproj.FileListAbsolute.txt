@@ -13,3 +13,10 @@ D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThir
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.Properties.Resources.resources
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.csproj.GenerateResource.cache
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.csproj.CoreCompileInputs.cache
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ALESView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ALESView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethodsView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethodsView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\SortingView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\SortingView.baml
