@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:ProgrammingThirdSem.NumericalMethods.Views"
+        xmlns:wpf="http://oxyplot.org/wpf"
+        xmlns:viewModels="clr-namespace:ProgrammingThirdSem.NumericalMethods.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:GraphViewModel}"
         Title="Graph" Height="350" Width="700">
   <Grid>
     <Grid.ColumnDefinitions>
@@ -21,11 +23,11 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Margin="0 0 10 0">
           <TextBlock Margin="0 0 0 5px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Длина оси Ox</TextBlock>
-          <TextBox x:Name="WidthXAxisTextBox" Padding="0 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding WidthXAxis, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+          <TextBox Padding="0 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding WidthXAxis, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="0 0 0 0">
           <TextBlock Margin="0 0 0 5px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Длина оси Oy</TextBlock>
-          <TextBox x:Name="WidthYAxis" Padding="0 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding WidthYAxis, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+          <TextBox Padding="0 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding WidthYAxis, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </StackPanel>
       </Grid>
       <Grid Margin="0 0 0 10">
@@ -53,12 +55,13 @@
           </ComboBox>
         </StackPanel>
       </Grid>
-      <Button Height="30px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructPlotCommand}" Margin="0 0 0 20">Построить график функции</Button>
+      <Button Height="30px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Margin="0 0 0 20">Построить график функции</Button>
       <TextBlock FontSize="14px" FontFamily="Montserrat" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding ResultText}" ></TextBlock>
+      <TextBlock Text="{Binding IterationsInfo}"/>
     </StackPanel>
     <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
     <StackPanel Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 50 20 50">
-      <!-- <oxy:PlotView Model="{Binding PlotModel}" Height="400"/> -->
+      <wpf:PlotView Model="{Binding PlotModel}" Height="400"/>
     </StackPanel>
   </Grid>
 </Window>

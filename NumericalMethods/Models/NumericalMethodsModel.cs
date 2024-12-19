@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using org.mariuszgromada.math.mxparser;
 using Expression = org.mariuszgromada.math.mxparser.Expression;
 
@@ -9,43 +11,44 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         private static readonly double Phi = (1 + Math.Sqrt(5)) / 2;
         private const double DefaultDelta = 0.0000001F;
 
-        //  Поиск точки пересечения графика функции с осью абсцисс методом дихотомии
-        public static double FindPointOfIntersectionDihotomyMethod(string functionExpression, double parametrA, double parametrB, double epsilon)
+        public static List<(double, double, double)> DichotomyMethod(Function function, double pointA, double pointB, double epsilon)
         {
-            var expression = ConvertExpressionToFunctionFromString(functionExpression);
-            var parametrAValue = SolveFunc(expression, parametrA);
-            var parametrBValue = SolveFunc(expression, parametrB);
-            double middleOfSegment = 0;
-            double middleOfSegmentValue;
-            var xMin = Math.Round(FindMinimumByGoldenSection(functionExpression, parametrA, parametrB, epsilon), 2, MidpointRounding.AwayFromZero);
-            var xMinValue = SolveFunc(expression, xMin);
+            var pointAValue = SolveFunc(function, pointA);
 
-            if (parametrAValue * xMinValue > 0 && parametrBValue * xMinValue > 0)
+            if (pointAValue == 0)
             {
-                throw new ArgumentException("Функция имеет более не имеет точек пересечения с осью абсцисс на заданном интервале, либо их количество чётно");
+                return new List<(double, double, double)>() {(0, 0, pointA)};
+            } else if (SolveFunc(function, pointB) == 0)
+            {
+                return new List<(double, double, double)>() {(0, 0, pointB)};
             }
+            
+            var valuesHistory = new List<(double, double, double)>();
 
-            while (parametrB - parametrA > epsilon) {
-                middleOfSegment = (parametrA + parametrB) / 2;
-                middleOfSegmentValue = SolveFunc(expression, middleOfSegment);
+            while (pointB - pointA > epsilon)
+            {
+                var middlePoint = (pointA + pointB) / 2;
+                var middlePointValue = SolveFunc(function, middlePoint);
+                valuesHistory.Add((pointA, pointB, middlePoint));
 
-                if (middleOfSegmentValue == 0) {
-                    break;
-                } else if (parametrAValue == 0) {
-                    return parametrA;
-                } else if (parametrBValue == 0)
+                if (middlePointValue == 0)
                 {
-                    return parametrB;
-                } else if (parametrAValue * middleOfSegmentValue < 0)
+                    return valuesHistory;
+                }
+
+                if (pointAValue * middlePointValue < 0)
                 {
-                    parametrB = middleOfSegment;
-                } else {
-                    parametrA = middleOfSegment;
-                    parametrAValue = middleOfSegmentValue;
+                    pointB = middlePoint;
+                }
+                else
+                {
+                    pointA = middlePoint;
+                    pointAValue = middlePointValue;
                 }
             }
-
-            return middleOfSegment;
+            
+            valuesHistory.Add((pointA, pointB, (pointA + pointB) / 2));
+            return valuesHistory;
         }
 
         //  Поиск точки минимума методом золотого сечения 

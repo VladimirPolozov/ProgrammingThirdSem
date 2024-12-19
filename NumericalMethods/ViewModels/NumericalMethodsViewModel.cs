@@ -1,27 +1,260 @@
-﻿using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows;
+using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
+using org.mariuszgromada.math.mxparser;
 using ProgrammingThirdSem.NumericalMethods.Models;
+using ProgrammingThirdSem.NumericalMethods.Views;
+using License = org.mariuszgromada.math.mxparser.License;
 
 namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
     public sealed class NumericalMethodsViewModel : INotifyPropertyChanged
     {
-        private PlotModel _plotModel;  // основной класс в библиотеке OxyPlot, используемый для создания графиков и диаграмм
+        // чек-боксы выбора методов
+        private bool _isDichotomyMethodChecked;
+        private bool _isGoldenRatioMethodChecked;
+        private bool _isNewtonMethodChecked;
+        private bool _isCoordinateDescentMethodChecked;
+        private bool _isRectangleMethodChecked;
+        private bool _isTrapezoidMethodChecked;
+        private bool _isParabolaMethodChecked;
+        
+        public bool IsDichotomyMethodChecked
+        {
+            get => _isDichotomyMethodChecked;
+            set
+            {
+                _isDichotomyMethodChecked = value;
+                OnPropertyChanged(nameof(IsDichotomyMethodChecked));
+            }
+        }
+
+        public bool IsGoldenRatioMethodChecked
+        {
+            get => _isGoldenRatioMethodChecked;
+            set
+            {
+                _isGoldenRatioMethodChecked = value;
+                OnPropertyChanged(nameof(IsGoldenRatioMethodChecked));
+            }
+        }
+
+        public bool IsNewtonMethodChecked
+        {
+            get => _isNewtonMethodChecked;
+            set
+            {
+                _isNewtonMethodChecked = value;
+                OnPropertyChanged(nameof(IsNewtonMethodChecked));
+            }
+        }
+        
+        public bool IsCoordinateDescentMethodChecked
+        {
+            get => _isCoordinateDescentMethodChecked;
+            set
+            {
+                _isCoordinateDescentMethodChecked = value;
+                OnPropertyChanged(nameof(IsCoordinateDescentMethodChecked));
+            }
+        }
+
+        public bool IsRectangleMethodChecked
+        {
+            get => _isRectangleMethodChecked;
+            set
+            {
+                _isRectangleMethodChecked = value;
+                OnPropertyChanged(nameof(IsRectangleMethodChecked));
+            }
+        }
+        
+        public bool IsTrapezoidMethodChecked
+        {
+            get => _isTrapezoidMethodChecked;
+            set
+            {
+                _isTrapezoidMethodChecked = value;
+                OnPropertyChanged(nameof(IsTrapezoidMethodChecked));
+            }
+        }
+
+        public bool IsParabolaMethodChecked
+        {
+            get => _isParabolaMethodChecked;
+            set
+            {
+                _isParabolaMethodChecked = value;
+                OnPropertyChanged(nameof(IsParabolaMethodChecked));
+            }
+        }
+        
+        // результат выполения методов
+        private string _dichotomyMethodResult;
+        private string _goldenRatioMethodResult;
+        private string _newtonMethodResult;
+        private string _coordinateDescentMethodResult;
+        private string _rectangleMethodResult;
+        private string _trapezoidMethodResult;
+        private string _parabolaMethodResult;
+        
+        public string DichotomyMethodResult
+        {
+            get => _dichotomyMethodResult;
+            set
+            {
+                _dichotomyMethodResult = value;
+                OnPropertyChanged(nameof(DichotomyMethodResult));
+            }
+        }
+
+        public string GoldenRatioMethodResult
+        {
+            get => _goldenRatioMethodResult;
+            set
+            {
+                _goldenRatioMethodResult = value;
+                OnPropertyChanged(nameof(GoldenRatioMethodResult));
+            }
+        }
+        
+        public string NewtonMethodResult
+        {
+            get => _newtonMethodResult;
+            set
+            {
+                _newtonMethodResult = value;
+                OnPropertyChanged(nameof(NewtonMethodResult));
+            }
+        }
+        
+        public string CoordinateDescentMethodResult
+        {
+            get => _coordinateDescentMethodResult;
+            set
+            {
+                _coordinateDescentMethodResult = value;
+                OnPropertyChanged(nameof(CoordinateDescentMethodResult));
+            }
+        }
+
+        public string RectangleMethodResult
+        {
+            get => _rectangleMethodResult;
+            set
+            {
+                _rectangleMethodResult = value;
+                OnPropertyChanged(nameof(RectangleMethodResult));
+            }
+        }
+
+        public string TrapezoidMethodResult
+        {
+            get => _trapezoidMethodResult;
+            set
+            {
+                _trapezoidMethodResult = value;
+                OnPropertyChanged(nameof(TrapezoidMethodResult));
+            }
+        }
+        
+        public string ParabolaMethodResult
+        {
+            get => _parabolaMethodResult;
+            set
+            {
+                _parabolaMethodResult = value;
+                OnPropertyChanged(nameof(ParabolaMethodResult));
+            }
+        }
+        
+        // история вычислений
+        private List<(double, double, double)> _dichotomyValuesHistory;
+        private List<(double, double, double)> _goldenRatioValuesHistory;
+        private List<(double, double, double)> _newtonValuesHistory;
+        private List<(double, double, double)> _coordinateDescentValuesHistory;
+        private List<(double, double, double)> _rectangleValuesHistory;
+        private List<(double, double, double)> _trapezoidValuesHistory;
+        private List<(double, double, double)> _parabolaValuesHistory;
+        
+        public List<(double, double, double)> DichotomyValuesHistory
+        {
+            get => _dichotomyValuesHistory;
+            set
+            {
+                _dichotomyValuesHistory = value;
+                OnPropertyChanged(nameof(DichotomyValuesHistory));
+            }
+        }
+
+        public List<(double, double, double)> GoldenRatioValuesHistory
+        {
+            get => _goldenRatioValuesHistory;
+            set
+            {
+                _goldenRatioValuesHistory = value;
+                OnPropertyChanged(nameof(GoldenRatioValuesHistory));
+            }
+        }
+        
+        public List<(double, double, double)> NewtonValuesHistory
+        {
+            get => _newtonValuesHistory;
+            set
+            {
+                _newtonValuesHistory = value;
+                OnPropertyChanged(nameof(NewtonValuesHistory));
+            }
+        }
+        
+        public List<(double, double, double)> CoordinateDescentValuesHistory
+        {
+            get => _coordinateDescentValuesHistory;
+            set
+            {
+                _coordinateDescentValuesHistory = value;
+                OnPropertyChanged(nameof(CoordinateDescentValuesHistory));
+            }
+        }
+
+        public List<(double, double, double)> RectangleValuesHistory
+        {
+            get => _rectangleValuesHistory;
+            set
+            {
+                _rectangleValuesHistory = value;
+                OnPropertyChanged(nameof(RectangleValuesHistory));
+            }
+        }
+
+        public List<(double, double, double)> TrapezoidValuesHistory
+        {
+            get => _trapezoidValuesHistory;
+            set
+            {
+                _trapezoidValuesHistory = value;
+                OnPropertyChanged(nameof(TrapezoidValuesHistory));
+            }
+        }
+        
+        public List<(double, double, double)> ParabolaValuesHistory
+        {
+            get => _parabolaValuesHistory;
+            set
+            {
+                _parabolaValuesHistory = value;
+                OnPropertyChanged(nameof(ParabolaValuesHistory));
+            }
+        }
+
         private string _functionExpression;
         private double _parameterA;
         private double _parameterB;
-        private double _epsilon; 
-        private string _resultText;
-        private int _widthXAxis;
-        private int _widthYAxis;
-        private int _countOfSingsAfterComma;
-        private int _graphicThickness;
-        private double _graphicPointsDelta;
+        private double _epsilon;
+        private int _singsAfterCommaCount;
 
         public string FunctionExpression
         {
@@ -63,89 +296,98 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public PlotModel PlotModel
+        public int SingsAfterCommaCount
         {
-            get => _plotModel;
-            private set
-            {
-                _plotModel = value;
-                OnPropertyChanged(nameof(PlotModel));
-            }
-        }
-
-        public string ResultText
-        {
-            get => _resultText;
+            get => _singsAfterCommaCount;
             set
             {
-                _resultText = value;
-                OnPropertyChanged(nameof(ResultText));
+                _singsAfterCommaCount = value;
+                OnPropertyChanged(nameof(SingsAfterCommaCount));
             }
         }
 
-        public int WidthXAxis
+        private void Calculate()
         {
-            get => _widthXAxis;
-            set
+            ClearData();
+
+            if (IsDichotomyMethodChecked)
             {
-                _widthXAxis = value;
-                OnPropertyChanged(nameof(WidthXAxis));
+                ExecuteCalculation(
+                    NumericalMethodsModel.DichotomyMethod,
+                    FunctionExpression,
+                    ParameterA,
+                    ParameterB,
+                    Epsilon,
+                    out var result
+                );
+
+                DichotomyValuesHistory = result;
+                DichotomyMethodResult = RoundItem(DichotomyValuesHistory.Last().Item3, SingsAfterCommaCount).ToString();
             }
         }
 
-        public int WidthYAxis
+        private static double RoundItem(double item3, int singsAfterCommaCount)
         {
-            get => _widthYAxis;
-            set
-            {
-                _widthYAxis = value;
-                OnPropertyChanged(nameof(WidthYAxis));
-            }
+            return Math.Round(item3, singsAfterCommaCount, MidpointRounding.AwayFromZero);
         }
 
-        public int CountOfSingsAfterComma
+        private static void ExecuteCalculation(
+            CalculationMethod calculationMethod,
+            string functionExpression,
+            double parameterA,
+            double parameterB,
+            double epsilon,
+            out List<(double, double, double)> result
+            )
         {
-            get => _countOfSingsAfterComma;
-            set
+            try
             {
-                _countOfSingsAfterComma = value;
-                OnPropertyChanged(nameof(CountOfSingsAfterComma));
+                var function = ConvertStringToFunc(functionExpression);
+                result = calculationMethod(function, parameterA, parameterB, epsilon);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
 
-        public double GraphicPointsDelta
+        private static Function ConvertStringToFunc(string functionExpression)
         {
-            get => _graphicPointsDelta;
-            set
-            {
-                _graphicPointsDelta = value;
-                OnPropertyChanged(nameof(GraphicPointsDelta));
-            }
+            return new Function("f(x) = " + functionExpression);
         }
 
-        public int GraphicThickness
+        private delegate List<(double, double, double)> CalculationMethod(Function function, double parameterA, double parameterB, double epsilon);
+
+        private void ClearData()
         {
-            get => _graphicThickness;
-            set
-            {
-                _graphicThickness = value;
-                OnPropertyChanged(nameof(GraphicThickness));
-            }
+            DichotomyMethodResult = "";
+            GoldenRatioMethodResult = "";
+            NewtonMethodResult = "";
+            CoordinateDescentMethodResult = "";
+            RectangleMethodResult = "";
+            TrapezoidMethodResult = "";
+            ParabolaMethodResult = "";
         }
-
-        // Команда для вызова метода
-        public ICommand ConstructPlotCommand { get; }
+        
+        public ICommand CalculateCommand { get; }
+        
+        // Показать график
+        public ICommand DichotomyShowGraphCommand { get; }
 
         public NumericalMethodsViewModel()
         {
             // вставляем в форму данные по умолчанию
             SetDefaultData();
 
-            // Привязываем команды к методу
-            ConstructPlotCommand = new RelayCommand(_ => ConstructPlot());
+            CalculateCommand = new RelayCommand(_ => Calculate());
+            
+            DichotomyShowGraphCommand = new RelayCommand(_ => DichotomyShowGraph());
+        }
 
-            // Инициализируем пустой график
-            PlotModel = new PlotModel { Title = "График функции" };
+        private void DichotomyShowGraph()
+        {
+            var showGraphic = new Graph(DichotomyValuesHistory, ConvertStringToFunc(FunctionExpression));
+            showGraphic.ShowDialog();
         }
 
         private void SetDefaultData()
@@ -154,192 +396,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             ParameterA = -50;
             ParameterB = 50;
             Epsilon = 0.01;
-            WidthXAxis = 50;
-            WidthYAxis = 50;
-            CountOfSingsAfterComma = 2;
-            GraphicPointsDelta = 0.5;
-            GraphicThickness = 2;
-            _resultText = "";
-        }
-
-        private void FindPointOfIntersectionDichotomy()
-        {
-            try
-            {
-                var result = NumericalMethodsModel.FindPointOfIntersectionDihotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
-                ResultText = $"Точка пересечения (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
-                ConstructPlot(result);
-            } catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
-        }
-
-        private void FindPointOfIntersectionNewton()
-        {
-            var nextPoint = _parameterB;
-            try {
-                double currentPoint;
-                do
-                {
-                    currentPoint = nextPoint;
-                    nextPoint = NumericalMethodsModel.FindPointOfIntersectionNewtonMethod(FunctionExpression, currentPoint);
-                    ConstructPlot(currentPoint);
-                    MessageBox.Show($"Промежуточный результат: x_i = {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}");
-                } while (Math.Abs(nextPoint - currentPoint) > _epsilon);
-                ResultText = $"Точка пересечения (x): {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
-        }
-
-        private void FindExtremeNewton()
-        {
-            var nextPoint = _parameterB;
-            try
-            {
-                double currentPoint;
-                do
-                {
-                    currentPoint = nextPoint;
-                    nextPoint = NumericalMethodsModel.FindExtremeNewtonMethod(FunctionExpression, currentPoint);
-                    ConstructPlot(nextPoint);
-                    MessageBox.Show($"Промежуточный результат: x_i = {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}");
-                } while (Math.Abs(nextPoint - currentPoint) > _epsilon);
-                ResultText = $"Точка пересечения (x): {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
-        }
-
-        private void FindMinimum()
-        {
-            try
-            {
-                var result = NumericalMethodsModel.FindMinimumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
-                ResultText = $"Точка минимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
-                ConstructPlot(result);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
-        }
-
-        private void FindMaximum()
-        {
-            try
-            {
-                var result = NumericalMethodsModel.FindMaximumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
-                ResultText = $"Точка максимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
-                ConstructPlot(result);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
-        }
-
-        private void ConstructPlot(double markCoordX)
-        {
-            // Обновляем график
-            PlotModel = new PlotModel { Title = "График функции" };
-            var series = new LineSeries { Title = "f(x)", StrokeThickness = GraphicThickness };
-            var mark = new LineSeries { Title = "f(x)", StrokeThickness = 1, Color = OxyColors.Blue };
-
-            // Настройка оси X
-            var xAxis = new LinearAxis
-            {
-                Position = AxisPosition.Bottom, // Ось X снизу
-                Minimum = WidthXAxis / -2,  // Минимум по X
-                Maximum = WidthXAxis / 2,   // Максимум по X
-                Title = "",  // Подпись оси
-                // MajorGridlineStyle = LineStyle.Solid, // Основная сетка
-                // MinorGridlineStyle = LineStyle.Dot,   // Второстепенная сетка
-                PositionAtZeroCrossing = true // Ось X пересекается с осью Y в 0
-            };
-
-            // Настройка оси Y
-            var yAxis = new LinearAxis
-            {
-                Position = AxisPosition.Left, // Ось Y слева
-                Minimum = WidthYAxis / -2,  // Минимум по Y
-                Maximum = WidthYAxis / 2,   // Максимум по Y
-                Title = "",  // Подпись оси
-                // MajorGridlineStyle = LineStyle.Solid, // Основная сетка
-                // MinorGridlineStyle = LineStyle.Dot,   // Второстепенная сетка
-                PositionAtZeroCrossing = true // Ось Y пересекается с осью X в 0
-            };
-
-            // Добавляем оси в модель
-            PlotModel.Axes.Add(xAxis);
-            PlotModel.Axes.Add(yAxis);
-
-            // Рисуем график
-            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += _graphicPointsDelta)
-            {
-                var y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
-                series.Points.Add(new DataPoint(x, y));
-            }
-
-            // Рисуем вертикальную линию
-            for (var y = yAxis.Minimum; y <= yAxis.Maximum; y += 1)
-            {
-                mark.Points.Add(new DataPoint(markCoordX, y));
-            }
-
-            PlotModel.Series.Add(series);
-            PlotModel.Series.Add(mark);
-            PlotModel.InvalidatePlot(true);
-        }
-
-        private void ConstructPlot()
-        {
-            // Обновляем график
-            PlotModel = new PlotModel { Title = "График функции" };
-            var series = new LineSeries { Title = "f(x)", StrokeThickness = GraphicThickness };
-
-            // Настройка оси X
-            var xAxis = new LinearAxis
-            {
-                Position = AxisPosition.Bottom, // Ось X снизу
-                Minimum = WidthXAxis / -2,  // Минимум по X
-                Maximum = WidthXAxis /  2,   // Максимум по X
-                Title = "",  // Подпись оси
-                // MajorGridlineStyle = LineStyle.Solid, // Основная сетка
-                // MinorGridlineStyle = LineStyle.Dot,   // Второстепенная сетка
-                PositionAtZeroCrossing = true // Ось X пересекается с осью Y в 0
-            };
-
-            // Настройка оси Y
-            var yAxis = new LinearAxis
-            {
-                Position = AxisPosition.Left, // Ось Y слева
-                Minimum = WidthYAxis / -2,  // Минимум по Y
-                Maximum = WidthYAxis / 2,   // Максимум по Y
-                Title = "",  // Подпись оси
-                // MajorGridlineStyle = LineStyle.Solid, // Основная сетка
-                // MinorGridlineStyle = LineStyle.Dot,   // Второстепенная сетка
-                PositionAtZeroCrossing = true // Ось Y пересекается с осью X в 0
-            };
-
-            // Добавляем оси в модель
-            PlotModel.Axes.Add(xAxis);
-            PlotModel.Axes.Add(yAxis);
-
-            // Рисуем график
-            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += _graphicPointsDelta)
-            {
-                var y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
-                series.Points.Add(new DataPoint(x, y));
-            }
-
-            PlotModel.Series.Add(series);
-            PlotModel.InvalidatePlot(true);
+            SingsAfterCommaCount = 2;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

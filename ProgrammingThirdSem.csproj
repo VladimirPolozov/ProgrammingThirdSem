@@ -79,7 +79,7 @@
     <Compile Include="Lsm\Views\LsmView.xaml.cs">
       <DependentUpon>LsmView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NumericalMethods\Models\GrapModel.cs" />
+    <Compile Include="NumericalMethods\Models\GraphModel.cs" />
     <Compile Include="NumericalMethods\Models\NumericalMethodsModel.cs" />
     <Compile Include="NumericalMethods\ViewModels\GraphViewModel.cs" />
     <Compile Include="NumericalMethods\ViewModels\NumericalMethodsViewModel.cs" />
