@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\App.xaml
-62089758391
+7-1373455180
 
-101782923723
+131564192276
 13-38814620
-ALESView.xaml;IntegralView.xaml;LSMView.xaml;MainWindow.xaml;NumericalMethodsView.xaml;SortingView.xaml;
+ALESView.xaml;IntegralView.xaml;LSMView.xaml;MainWindow.xaml;NumericalMethodsView.xaml;Sorting\Views\InputArrayLengthWindow.xaml;Sorting\Views\SortingView.xaml;
 
-True
+False
 

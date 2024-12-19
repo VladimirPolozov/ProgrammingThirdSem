@@ -18,5 +18,11 @@ D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\GeneratedIntern
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ALESView.baml
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethodsView.g.cs
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethodsView.baml
-D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\SortingView.g.cs
-D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\SortingView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\IntegralView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\LSMView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Sorting\Views\SortingView.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\IntegralView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\LSMView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Sorting\Views\SortingView.baml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Sorting\Views\InputArrayLengthWindow.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Sorting\Views\InputArrayLengthWindow.baml

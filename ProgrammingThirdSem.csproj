@@ -61,7 +61,12 @@
     <Compile Include="LSMView.xaml.cs">
       <DependentUpon>LSMView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SortingView.xaml.cs">
+    <Compile Include="Sorting\Models\SortingModel.cs" />
+    <Compile Include="Sorting\ViewModels\SortingViewModel.cs" />
+    <Compile Include="Sorting\Views\InputArrayLengthWindow.xaml.cs">
+      <DependentUpon>InputArrayLengthWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sorting\Views\SortingView.xaml.cs">
       <DependentUpon>SortingView.xaml</DependentUpon>
     </Compile>
     <Page Include="ALESView.xaml" />
@@ -83,7 +88,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NumericalMethodsView.xaml" />
-    <Page Include="SortingView.xaml" />
+    <Page Include="Sorting\Views\InputArrayLengthWindow.xaml" />
+    <Page Include="Sorting\Views\SortingView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NumericalMethodsView.xaml.cs">

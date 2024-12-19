@@ -1,0 +1,27 @@
+﻿<Window x:Class="ProgrammingThirdSem.Sorting.Views.InputArrayLengthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ProgrammingThirdSem.Sorting.Views"
+        mc:Ignorable="d"
+        Title="Введите длину массива" Height="250" Width="250">
+    <Grid>
+        <StackPanel Width="200px" VerticalAlignment="Center">
+            <TextBlock FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="Длина массива" Margin="0 0 0 5px"/>
+            <TextBox x:Name="ArrayLengthTextBox" Margin="0 0 0 10px" FontFamily="Montserrat">100</TextBox>
+            <TextBlock FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="Минимальное значение" Margin="0 0 0 5px"/>
+            <TextBox x:Name="MinValueTextBox" Margin="0 0 0 10px" FontFamily="Montserrat">-100</TextBox>
+            <TextBlock FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="Максимальное значение" Margin="0 0 0 5px"/>
+            <TextBox x:Name="MaxValueTextBox" Margin="0 0 0 10px" FontFamily="Montserrat">100</TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="0 0 5px 0" Grid.Column="0" Click="Cancel_Click" IsCancel="True" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0">Отмена</Button>
+                <Button Margin="5px 0 0 0" Grid.Column="1" Click="Accept_Click"  IsDefault="True" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0">OK</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
