@@ -11,131 +11,131 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
     public class NumericalMethodsViewModel : INotifyPropertyChanged
     {
-        private PlotModel plotModel;  // основной класс в библиотеке OxyPlot, используемый для создания графиков и диаграмм
-        private string functionExpression;
-        private double parametrA;
-        private double parametrB;
-        private double epsilon; 
-        private string resultText;
-        private int widthXAxis;
-        private int widthYAxis;
-        private int countOfSingsAfterComma;
-        private int graphicThickness;
-        private double graphicPointsDelta;
+        private PlotModel _plotModel;  // основной класс в библиотеке OxyPlot, используемый для создания графиков и диаграмм
+        private string _functionExpression;
+        private double _parameterA;
+        private double _parameterB;
+        private double _epsilon; 
+        private string _resultText;
+        private int _widthXAxis;
+        private int _widthYAxis;
+        private int _countOfSingsAfterComma;
+        private int _graphicThickness;
+        private double _graphicPointsDelta;
 
         public string FunctionExpression
         {
-            get => functionExpression;
+            get => _functionExpression;
             set
             {
-                functionExpression = value.ToLower();
+                _functionExpression = value.ToLower();
                 OnPropertyChanged(nameof(FunctionExpression));
             }
         }
 
-        public double ParametrA
+        public double ParameterA
         {
-            get => parametrA;
+            get => _parameterA;
             set
             {
-                parametrA = value;
-                OnPropertyChanged(nameof(ParametrA));
+                _parameterA = value;
+                OnPropertyChanged(nameof(ParameterA));
             }
         }
 
-        public double ParametrB
+        public double ParameterB
         {
-            get => parametrB;
+            get => _parameterB;
             set
             {
-                parametrB = value;
-                OnPropertyChanged(nameof(ParametrB));
+                _parameterB = value;
+                OnPropertyChanged(nameof(ParameterB));
             }
         }
 
         public double Epsilon
         {
-            get => epsilon;
+            get => _epsilon;
             set
             {
-                epsilon = value;
+                _epsilon = value;
                 OnPropertyChanged(nameof(Epsilon));
             }
         }
 
         public PlotModel PlotModel
         {
-            get => plotModel;
+            get => _plotModel;
             private set
             {
-                plotModel = value;
+                _plotModel = value;
                 OnPropertyChanged(nameof(PlotModel));
             }
         }
 
         public string ResultText
         {
-            get => resultText;
+            get => _resultText;
             set
             {
-                resultText = value;
+                _resultText = value;
                 OnPropertyChanged(nameof(ResultText));
             }
         }
 
         public int WidthXAxis
         {
-            get => widthXAxis;
+            get => _widthXAxis;
             set
             {
-                widthXAxis = value;
+                _widthXAxis = value;
                 OnPropertyChanged(nameof(WidthXAxis));
             }
         }
 
         public int WidthYAxis
         {
-            get => widthYAxis;
+            get => _widthYAxis;
             set
             {
-                widthYAxis = value;
+                _widthYAxis = value;
                 OnPropertyChanged(nameof(WidthYAxis));
             }
         }
 
         public int CountOfSingsAfterComma
         {
-            get => countOfSingsAfterComma;
+            get => _countOfSingsAfterComma;
             set
             {
-                countOfSingsAfterComma = value;
+                _countOfSingsAfterComma = value;
                 OnPropertyChanged(nameof(CountOfSingsAfterComma));
             }
         }
 
         public double GraphicPointsDelta
         {
-            get => graphicPointsDelta;
+            get => _graphicPointsDelta;
             set
             {
-                graphicPointsDelta = value;
+                _graphicPointsDelta = value;
                 OnPropertyChanged(nameof(GraphicPointsDelta));
             }
         }
 
         public int GraphicThickness
         {
-            get => graphicThickness;
+            get => _graphicThickness;
             set
             {
-                graphicThickness = value;
+                _graphicThickness = value;
                 OnPropertyChanged(nameof(GraphicThickness));
             }
         }
 
         // Команда для вызова метода
         public ICommand ConstructPlotCommand { get; }
-        public ICommand FindPointOfIntersectionDihotomyCommand { get; }
+        public ICommand FindPointOfIntersectionDichotomyCommand { get; }
         public ICommand FindPointOfIntersectionNewtonCommand { get; }
         public ICommand SetDefaultDataCommand { get; }
         public ICommand FindMinimumByGoldenSectionCommand { get; }
@@ -149,7 +149,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
             // Привязываем команды к методу
             ConstructPlotCommand = new RelayCommand(_ => ConstructPlot());
-            FindPointOfIntersectionDihotomyCommand = new RelayCommand(_ => FindPointOfIntersectionDihotomy());
+            FindPointOfIntersectionDichotomyCommand = new RelayCommand(_ => FindPointOfIntersectionDichotomy());
             FindPointOfIntersectionNewtonCommand = new RelayCommand(_ => FindPointOfIntersectionNewton());
             SetDefaultDataCommand = new RelayCommand(_ => SetDefaultData());
             FindMinimumByGoldenSectionCommand = new RelayCommand(_ => FindMinimum());
@@ -160,25 +160,25 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             PlotModel = new PlotModel { Title = "График функции" };
         }
 
-        public void SetDefaultData()
+        private void SetDefaultData()
         {
             FunctionExpression = "x";
-            ParametrA = -50;
-            ParametrB = 50;
+            ParameterA = -50;
+            ParameterB = 50;
             Epsilon = 0.01;
             WidthXAxis = 50;
             WidthYAxis = 50;
             CountOfSingsAfterComma = 2;
             GraphicPointsDelta = 0.5;
             GraphicThickness = 2;
-            resultText = "";
+            _resultText = "";
         }
 
-        private void FindPointOfIntersectionDihotomy()
+        private void FindPointOfIntersectionDichotomy()
         {
             try
             {
-                double result = NumericalMethodsModel.FindPointOfIntersectionDihotomyMethod(FunctionExpression, ParametrA, ParametrB, Epsilon);
+                double result = NumericalMethodsModel.FindPointOfIntersectionDihotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка пересечения (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             } catch (Exception ex)
@@ -187,18 +187,18 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public void FindPointOfIntersectionNewton()
+        private void FindPointOfIntersectionNewton()
         {
+            var nextPoint = _parameterB;
             try {
                 double currentPoint;
-                double nextPoint = parametrB;
                 do
                 {
                     currentPoint = nextPoint;
                     nextPoint = NumericalMethodsModel.FindPointOfIntersectionNewtonMethod(FunctionExpression, currentPoint);
                     ConstructPlot(currentPoint);
                     MessageBox.Show($"Промежуточный результат: x_i = {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}");
-                } while (Math.Abs(nextPoint - currentPoint) > epsilon);
+                } while (Math.Abs(nextPoint - currentPoint) > _epsilon);
                 ResultText = $"Точка пересечения (x): {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
             }
             catch (Exception ex)
@@ -207,33 +207,32 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public void FindExtremeNewton()
+        private void FindExtremeNewton()
         {
+            var nextPoint = _parameterB;
             try
             {
                 double currentPoint;
-                double nextPoint = parametrB;
                 do
                 {
                     currentPoint = nextPoint;
                     nextPoint = NumericalMethodsModel.FindExtremeNewtonMethod(FunctionExpression, currentPoint);
                     ConstructPlot(nextPoint);
                     MessageBox.Show($"Промежуточный результат: x_i = {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}");
-                } while (Math.Abs(nextPoint - currentPoint) > epsilon);
+                } while (Math.Abs(nextPoint - currentPoint) > _epsilon);
                 ResultText = $"Точка пересечения (x): {Math.Round(nextPoint, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }
-
         }
 
         private void FindMinimum()
         {
             try
             {
-                double result = NumericalMethodsModel.FindMinimumByGoldenSection(FunctionExpression, ParametrA, ParametrB, Epsilon);
+                double result = NumericalMethodsModel.FindMinimumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка минимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             }
@@ -247,7 +246,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         {
             try
             {
-                double result = NumericalMethodsModel.FindMaximumByGoldenSection(FunctionExpression, ParametrA, ParametrB, Epsilon);
+                double result = NumericalMethodsModel.FindMaximumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка максимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             }
@@ -293,14 +292,14 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             PlotModel.Axes.Add(yAxis);
 
             // Рисуем график
-            for (double x = xAxis.Minimum; x <= xAxis.Maximum; x += graphicPointsDelta)
+            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += _graphicPointsDelta)
             {
-                double y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
+                var y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
                 series.Points.Add(new DataPoint(x, y));
             }
 
             // Рисуем вертикальную линию
-            for (double y = yAxis.Minimum; y <= yAxis.Maximum; y += 1)
+            for (var y = yAxis.Minimum; y <= yAxis.Maximum; y += 1)
             {
                 mark.Points.Add(new DataPoint(markCoordX, y));
             }
@@ -345,9 +344,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             PlotModel.Axes.Add(yAxis);
 
             // Рисуем график
-            for (double x = xAxis.Minimum; x <= xAxis.Maximum; x += graphicPointsDelta)
+            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += _graphicPointsDelta)
             {
-                double y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
+                var y = NumericalMethodsModel.SolveFunc(NumericalMethodsModel.ConvertExpressionToFunctionFromString(FunctionExpression), x);
                 series.Points.Add(new DataPoint(x, y));
             }
 
