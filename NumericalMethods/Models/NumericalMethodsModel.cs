@@ -12,13 +12,13 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         //  Поиск точки пересечения графика функции с осью абсцисс методом дихотомии
         public static double FindPointOfIntersectionDihotomyMethod(string functionExpression, double parametrA, double parametrB, double epsilon)
         {
-            Function expression = ConvertExpressionToFunctionFromString(functionExpression);
-            double parametrAValue = SolveFunc(expression, parametrA);
-            double parametrBValue = SolveFunc(expression, parametrB);
+            var expression = ConvertExpressionToFunctionFromString(functionExpression);
+            var parametrAValue = SolveFunc(expression, parametrA);
+            var parametrBValue = SolveFunc(expression, parametrB);
             double middleOfSegment = 0;
             double middleOfSegmentValue;
-            double xMin = Math.Round(FindMinimumByGoldenSection(functionExpression, parametrA, parametrB, epsilon), 2, MidpointRounding.AwayFromZero);
-            double xMinValue = SolveFunc(expression, xMin);
+            var xMin = Math.Round(FindMinimumByGoldenSection(functionExpression, parametrA, parametrB, epsilon), 2, MidpointRounding.AwayFromZero);
+            var xMinValue = SolveFunc(expression, xMin);
 
             if (parametrAValue * xMinValue > 0 && parametrBValue * xMinValue > 0)
             {
@@ -51,11 +51,11 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         //  Поиск точки минимума методом золотого сечения 
         public static double FindMinimumByGoldenSection(string functionExpression, double parametrA, double parametrB, double epsilon)
         {
-            Function expression = ConvertExpressionToFunctionFromString(functionExpression);
+            var expression = ConvertExpressionToFunctionFromString(functionExpression);
             do
             {
-                double firstDot = parametrB - (parametrB - parametrA) / Phi;
-                double secondDot = parametrA + (parametrB - parametrA) / Phi;
+                var firstDot = parametrB - (parametrB - parametrA) / Phi;
+                var secondDot = parametrA + (parametrB - parametrA) / Phi;
                 if (SolveFunc(expression, firstDot) >= SolveFunc(expression, secondDot))
                 {
                     parametrA = firstDot;
@@ -71,11 +71,11 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         //  Поиск точки максимума методом золотого сечения 
         public static double FindMaximumByGoldenSection(string functionExpression, double parametrA, double parametrB, double epsilon)
         {
-            Function expression = ConvertExpressionToFunctionFromString(functionExpression);
+            var expression = ConvertExpressionToFunctionFromString(functionExpression);
             do
             {
-                double firstDot = parametrB - (parametrB - parametrA) / Phi;
-                double secondDot = parametrA + (parametrB - parametrA) / Phi;
+                var firstDot = parametrB - (parametrB - parametrA) / Phi;
+                var secondDot = parametrA + (parametrB - parametrA) / Phi;
                 if (SolveFunc(expression, firstDot) <= SolveFunc(expression, secondDot))
                 {
                     parametrA = firstDot;
@@ -90,22 +90,22 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         // Поиск точки пересечения (нуль функции) методом Ньютона
         public static double FindPointOfIntersectionNewtonMethod(string functionExpression, double parametrB)
         {
-            Function expression = ConvertExpressionToFunctionFromString(functionExpression);
+            var expression = ConvertExpressionToFunctionFromString(functionExpression);
             return parametrB - (SolveFunc(expression, parametrB) / GetDerivative(expression, parametrB));
         }
 
         // Поиск экстремума (точка минимума или максимума) методом Ньютона
         public static double FindExtremeNewtonMethod(string functionExpression, double parametrB)
         {
-            Argument argument = new Argument($"x = {parametrB}");
-            Expression firstDerivative = new Expression($"der(({functionExpression}), x)", argument);
-            Expression secondDerivative = new Expression($"der(der({functionExpression}, x), x)", argument);
-            double firstDerivativeValue = firstDerivative.calculate();
-            double secondDerivativeValue = secondDerivative.calculate();
+            var argument = new Argument($"x = {parametrB}");
+            var firstDerivative = new Expression($"der(({functionExpression}), x)", argument);
+            var secondDerivative = new Expression($"der(der({functionExpression}, x), x)", argument);
+            var firstDerivativeValue = firstDerivative.calculate();
+            var secondDerivativeValue = secondDerivative.calculate();
             return parametrB - (firstDerivativeValue / secondDerivativeValue);
         }
 
-        public static double GetDerivative(Function function, double point)
+        private static double GetDerivative(Function function, double point)
         {
             return (SolveFunc(function, point + DefaultDelta) - SolveFunc(function, point - DefaultDelta)) / (2 * DefaultDelta);
         }

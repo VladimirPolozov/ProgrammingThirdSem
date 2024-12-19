@@ -9,7 +9,7 @@ using ProgrammingThirdSem.NumericalMethods.Models;
 
 namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
-    public class NumericalMethodsViewModel : INotifyPropertyChanged
+    public sealed class NumericalMethodsViewModel : INotifyPropertyChanged
     {
         private PlotModel _plotModel;  // основной класс в библиотеке OxyPlot, используемый для создания графиков и диаграмм
         private string _functionExpression;
@@ -135,12 +135,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         // Команда для вызова метода
         public ICommand ConstructPlotCommand { get; }
-        public ICommand FindPointOfIntersectionDichotomyCommand { get; }
-        public ICommand FindPointOfIntersectionNewtonCommand { get; }
-        public ICommand SetDefaultDataCommand { get; }
-        public ICommand FindMinimumByGoldenSectionCommand { get; }
-        public ICommand FindMaximumByGoldenSectionCommand { get; }
-        public ICommand FindExtremeNewtonCommand { get; }
 
         public NumericalMethodsViewModel()
         {
@@ -149,12 +143,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
             // Привязываем команды к методу
             ConstructPlotCommand = new RelayCommand(_ => ConstructPlot());
-            FindPointOfIntersectionDichotomyCommand = new RelayCommand(_ => FindPointOfIntersectionDichotomy());
-            FindPointOfIntersectionNewtonCommand = new RelayCommand(_ => FindPointOfIntersectionNewton());
-            SetDefaultDataCommand = new RelayCommand(_ => SetDefaultData());
-            FindMinimumByGoldenSectionCommand = new RelayCommand(_ => FindMinimum());
-            FindMaximumByGoldenSectionCommand = new RelayCommand(_ => FindMaximum());
-            FindExtremeNewtonCommand = new RelayCommand(_ => FindExtremeNewton());
 
             // Инициализируем пустой график
             PlotModel = new PlotModel { Title = "График функции" };
@@ -178,7 +166,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         {
             try
             {
-                double result = NumericalMethodsModel.FindPointOfIntersectionDihotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                var result = NumericalMethodsModel.FindPointOfIntersectionDihotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка пересечения (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             } catch (Exception ex)
@@ -232,7 +220,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         {
             try
             {
-                double result = NumericalMethodsModel.FindMinimumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                var result = NumericalMethodsModel.FindMinimumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка минимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             }
@@ -246,7 +234,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         {
             try
             {
-                double result = NumericalMethodsModel.FindMaximumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                var result = NumericalMethodsModel.FindMaximumByGoldenSection(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 ResultText = $"Точка максимума (x): {Math.Round(result, CountOfSingsAfterComma, MidpointRounding.AwayFromZero)}";
                 ConstructPlot(result);
             }
@@ -355,27 +343,10 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
-
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-        public void Execute(object parameter) => _execute(parameter);
-
-        public event EventHandler CanExecuteChanged;
-        public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -79,7 +79,9 @@
     <Compile Include="Lsm\Views\LsmView.xaml.cs">
       <DependentUpon>LsmView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NumericalMethods\Models\GrapModel.cs" />
     <Compile Include="NumericalMethods\Models\NumericalMethodsModel.cs" />
+    <Compile Include="NumericalMethods\ViewModels\GraphViewModel.cs" />
     <Compile Include="NumericalMethods\ViewModels\NumericalMethodsViewModel.cs" />
     <Compile Include="NumericalMethods\Views\Graph.xaml.cs">
       <DependentUpon>Graph.xaml</DependentUpon>
@@ -87,6 +89,7 @@
     <Compile Include="NumericalMethods\Views\NumericalMethodsView.xaml.cs">
       <DependentUpon>NumericalMethodsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="Sorting\Models\SortingModel.cs" />
     <Compile Include="Sorting\ViewModels\SortingViewModel.cs" />
     <Compile Include="Sorting\Views\InputArrayLengthWindow.xaml.cs">

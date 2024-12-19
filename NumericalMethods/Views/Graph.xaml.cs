@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ProgrammingThirdSem.NumericalMethods.ViewModels;
 
 namespace ProgrammingThirdSem.NumericalMethods.Views
 {
@@ -7,6 +8,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Views
         public Graph()
         {
             InitializeComponent();
+            DataContext = new GraphViewModel();
         }
     }
 }
