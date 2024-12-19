@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProgrammingThirdSem"
         xmlns:views="clr-namespace:ProgrammingThirdSem.Sorting.Views"
+        xmlns:views1="clr-namespace:ProgrammingThirdSem.NumericalMethods.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="800">
   <Grid>
     <TabControl FontFamily="Montserrat">
       <TabItem Header="Численные методы" Padding="16px 8px" FontSize="11px">
-        <local:NumericalMethodsView></local:NumericalMethodsView>
+        <views1:NumericalMethodsView></views1:NumericalMethodsView>
       </TabItem>
       <TabItem Header="Сортировки" Padding="16px 8px" FontSize="11px">
         <views:SortingView></views:SortingView>
