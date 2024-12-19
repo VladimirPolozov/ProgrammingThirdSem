@@ -9,7 +9,7 @@ using ProgrammingThirdSem.Sorting.Views;
 
 namespace ProgrammingThirdSem.Sorting.ViewModels
 {
-    public class SortingViewModel : INotifyPropertyChanged
+    public sealed class SortingViewModel : INotifyPropertyChanged
     {
         // чек-боксы выбора методов сортировок
         private bool _isBubbleSortingChecked;
@@ -347,36 +347,34 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             };
 
             // Если пользователь выбрал файл
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() != true) return;
+            try
             {
-                try
-                {
-                    var filePath = openFileDialog.FileName;
-                    var fileContent = "";
+                var filePath = openFileDialog.FileName;
+                var fileContent = "";
 
-                    // Чтение содержимого файла в зависимости от формата
-                    if (filePath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // fileContent = LoadExcelFile(filePath);
-                    }
-                    else if (filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) ||
-                             filePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
-                    {
-                        fileContent = System.IO.File.ReadAllText(filePath);
-                    }
-                    else
-                    {
-                        throw new NotSupportedException("Неподдерживаемый формат файла.");
-                    }
-
-                    // Обновляем текстовое поле UserInput
-                    UserInput = string.Join(" ", fileContent.Split(new[] { ',', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
-                }
-                catch (Exception ex)
+                // Чтение содержимого файла в зависимости от формата
+                if (filePath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Обработка ошибок
-                    System.Windows.MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // fileContent = LoadExcelFile(filePath);
                 }
+                else if (filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) ||
+                         filePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    fileContent = System.IO.File.ReadAllText(filePath);
+                }
+                else
+                {
+                    throw new NotSupportedException("Неподдерживаемый формат файла.");
+                }
+
+                // Обновляем текстовое поле UserInput
+                UserInput = string.Join(" ", fileContent.Split(new[] { ',', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибок
+                System.Windows.MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         
@@ -409,7 +407,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             {
                 ExecuteSorting(
                     SortingModel.BubbleSort,
-                    UserInput,
                     CountOfTests,
                     IsAscendingSortChecked,
                     out var resultString,
@@ -425,7 +422,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             {
                 ExecuteSorting(
                     SortingModel.InsertionSort,
-                    UserInput,
                     CountOfTests,
                     IsAscendingSortChecked,
                     out var resultString,
@@ -441,7 +437,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             {
                 ExecuteSorting(
                     SortingModel.QuickSort,
-                    UserInput,
                     CountOfTests,
                     IsAscendingSortChecked,
                     out var resultString,
@@ -457,7 +452,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             {
                 ExecuteSorting(
                     SortingModel.ShakerSort,
-                    UserInput,
                     CountOfTests,
                     IsAscendingSortChecked,
                     out var resultString,
@@ -473,7 +467,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
             {
                 ExecuteSorting(
                     SortingModel.BogoSort,
-                    UserInput,
                     CountOfTests,
                     IsAscendingSortChecked,
                     out var resultString,
@@ -488,7 +481,6 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
         
         private void ExecuteSorting(
             SortingMethod sortingMethod,
-            string userInput,
             int countOfTests,
             bool isAscendingSortChecked,
             out string resultString,
@@ -542,7 +534,8 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -569,9 +562,9 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
     
     public class MixedValue : IComparable<MixedValue>
     {
-        public double? NumericValue { get; }
-        public string StringValue { get; }
-        public bool IsNumeric => NumericValue.HasValue;
+        private double? NumericValue { get; }
+        private string StringValue { get; }
+        private bool IsNumeric => NumericValue.HasValue;
 
         public MixedValue(string value)
         {
@@ -589,7 +582,10 @@ namespace ProgrammingThirdSem.Sorting.ViewModels
         {
             if (this.IsNumeric && other.IsNumeric)
             {
-                return this.NumericValue.Value.CompareTo(other.NumericValue.Value);
+                var numericValue = this.NumericValue;
+                if (numericValue != null)
+                    if (other.NumericValue != null)
+                        return numericValue.Value.CompareTo(other.NumericValue.Value);
             }
             if (!this.IsNumeric && !other.IsNumeric)
             {

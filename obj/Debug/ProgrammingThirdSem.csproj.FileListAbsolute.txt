@@ -34,3 +34,5 @@ D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Integral\Views\
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Lsm\Views\LsmView.baml
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethods\Views\NumericalMethodsView.baml
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Programm.0CDFCF1C.Up2Date
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethods\Views\Graph.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\NumericalMethods\Views\Graph.baml

@@ -19,18 +19,18 @@
       <Grid Margin="0 0px 0 48px">
         <Grid.RowDefinitions>
           <RowDefinition></RowDefinition>
-          <RowDefinition Height="50px"></RowDefinition>
-          <RowDefinition Height="50px"></RowDefinition>
-          <RowDefinition Height="50px"></RowDefinition>
-          <RowDefinition Height="50px"></RowDefinition>
-          <RowDefinition Height="50px"></RowDefinition>
+          <RowDefinition Height="50px"/>
+          <RowDefinition Height="50px"/>
+          <RowDefinition Height="50px"/>
+          <RowDefinition Height="50px"/>
+          <RowDefinition Height="50px"/>
           <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition></ColumnDefinition>
-          <ColumnDefinition></ColumnDefinition>
-          <ColumnDefinition></ColumnDefinition>
-          <ColumnDefinition></ColumnDefinition>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">Тип сортировки</TextBlock>
         <CheckBox Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" Content="Пузырьковая" FontFamily="Montserrat" IsChecked="{Binding IsBubbleSortingChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
