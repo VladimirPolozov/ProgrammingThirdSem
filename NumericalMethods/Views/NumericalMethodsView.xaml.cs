@@ -5,7 +5,6 @@ namespace ProgrammingThirdSem.NumericalMethods.Views
 {
     public partial class NumericalMethodsView : UserControl
     {
-        
         public NumericalMethodsView()
         {
             InitializeComponent();

@@ -69,11 +69,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IntegralView.xaml.cs">
+    <Compile Include="Ales\Models\AlesModel.cs" />
+    <Compile Include="Ales\ViewModels\AlesViewModel.cs" />
+    <Compile Include="Ales\Views\AlesView.xaml.cs">
+      <DependentUpon>AlesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Integral\Models\IntegralModel.cs" />
+    <Compile Include="Integral\ViewModels\IntegralViewModel.cs" />
+    <Compile Include="Integral\Views\IntegralView.xaml.cs">
       <DependentUpon>IntegralView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LSMView.xaml.cs">
-      <DependentUpon>LSMView.xaml</DependentUpon>
+    <Compile Include="Lsm\Models\LsmModel.cs" />
+    <Compile Include="Lsm\ViewModels\LsmViewModel.cs" />
+    <Compile Include="Lsm\Views\LsmView.xaml.cs">
+      <DependentUpon>LsmView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NumericalMethods\Models\NumericalMethodsModel.cs" />
     <Compile Include="NumericalMethods\ViewModels\NumericalMethodsViewModel.cs" />
@@ -88,16 +97,13 @@
     <Compile Include="Sorting\Views\SortingView.xaml.cs">
       <DependentUpon>SortingView.xaml</DependentUpon>
     </Compile>
-    <Page Include="ALESView.xaml" />
-    <Page Include="IntegralView.xaml" />
-    <Page Include="LSMView.xaml" />
+    <Page Include="Ales\Views\AlesView.xaml" />
+    <Page Include="Integral\Views\IntegralView.xaml" />
+    <Page Include="Lsm\Views\LsmView.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ALESView.xaml.cs">
-      <DependentUpon>ALESView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

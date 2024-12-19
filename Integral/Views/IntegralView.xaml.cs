@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ProgrammingThirdSem
+namespace ProgrammingThirdSem.Integral.Views
 {
     public partial class IntegralView : UserControl
     {
