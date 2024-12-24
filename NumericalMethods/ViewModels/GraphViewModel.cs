@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using org.mariuszgromada.math.mxparser;
 using OxyPlot;
@@ -125,6 +126,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         // Сохраняем историю вычислений
         private List<(double, double, double)> ValuesHistory { get; }
         private string _iterationsInfo;
+        private readonly Window _window;
 
         public string IterationsInfo
         {
@@ -195,10 +197,11 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         }
         
         public ICommand ConstructGraphCommand { get; }
+        public ICommand CloseCommand { get; }
         public ICommand ShowNextIterationCommand { get; }
         public ICommand ShowPreviousIterationCommand { get; }
         
-        public GraphViewModel(List<(double, double, double)> valuesHistory, Function function)
+        public GraphViewModel(List<(double, double, double)> valuesHistory, Function function, Window window)
         {
             ValuesHistory = valuesHistory;
             _function = function;
@@ -213,6 +216,14 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             ConstructGraphCommand = new RelayCommand(_ => UpdateGraph());
             ShowNextIterationCommand = new RelayCommand(_ => NextIteration());
             ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIteration());
+            CloseCommand = new RelayCommand(_ => CloseWindow());
+            
+            _window = window;
+        }
+
+        private void CloseWindow()
+        {
+            _window.Close();
         }
 
         private void PreviousIteration()

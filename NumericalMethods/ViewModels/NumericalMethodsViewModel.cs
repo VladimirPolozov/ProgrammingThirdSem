@@ -173,7 +173,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         
         // история вычислений
         private List<(double, double, double)> _dichotomyValuesHistory;
-        private List<(double, double, double)> _goldenRatioValuesHistory;
+        private List<(double, double, double)> _goldenRatioMaxValuesHistory;
+        private List<(double, double, double)> _goldenRatioMinValuesHistory;
         private List<(double, double, double)> _newtonValuesHistory;
         private List<(double, double, double)> _coordinateDescentValuesHistory;
         private List<(double, double, double)> _rectangleValuesHistory;
@@ -190,13 +191,23 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public List<(double, double, double)> GoldenRatioValuesHistory
+        public List<(double, double, double)> GoldenRatioMaxValuesHistory
         {
-            get => _goldenRatioValuesHistory;
+            get => _goldenRatioMaxValuesHistory;
             set
             {
-                _goldenRatioValuesHistory = value;
-                OnPropertyChanged(nameof(GoldenRatioValuesHistory));
+                _goldenRatioMaxValuesHistory = value;
+                OnPropertyChanged(nameof(GoldenRatioMaxValuesHistory));
+            }
+        }
+        
+        public List<(double, double, double)> GoldenRatioMinValuesHistory
+        {
+            get => _goldenRatioMinValuesHistory;
+            set
+            {
+                _goldenRatioMinValuesHistory = value;
+                OnPropertyChanged(nameof(GoldenRatioMinValuesHistory));
             }
         }
         
@@ -324,6 +335,33 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 DichotomyValuesHistory = result;
                 DichotomyMethodResult = RoundItem(DichotomyValuesHistory.Last().Item3, SingsAfterCommaCount).ToString();
             }
+
+            if (IsGoldenRatioMethodChecked)
+            {
+                ExecuteCalculation(
+                    NumericalMethodsModel.GoldenRatioMinMethod,
+                    FunctionExpression,
+                    ParameterA,
+                    ParameterB,
+                    Epsilon,
+                    out var result
+                );
+                GoldenRatioMinValuesHistory = result;
+                
+                ExecuteCalculation(
+                    NumericalMethodsModel.GoldenRatioMaxMethod,
+                    FunctionExpression,
+                    ParameterA,
+                    ParameterB,
+                    Epsilon,
+                    out result
+                    );
+                GoldenRatioMaxValuesHistory = result;
+                
+                var minResult = RoundItem(GoldenRatioMinValuesHistory.Last().Item3, SingsAfterCommaCount);
+                var maxResult = RoundItem(GoldenRatioMaxValuesHistory.Last().Item3, SingsAfterCommaCount);
+                GoldenRatioMethodResult = $"min: {minResult}; max: {maxResult}";
+            }
         }
 
         private static double RoundItem(double item3, int singsAfterCommaCount)
@@ -373,6 +411,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         
         // Показать график
         public ICommand DichotomyShowGraphCommand { get; }
+        public ICommand GoldenRatioMinShowGraphCommand { get; }
+        public ICommand GoldenRatioMaxShowGraphCommand { get; }
 
         public NumericalMethodsViewModel()
         {
@@ -382,6 +422,20 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             CalculateCommand = new RelayCommand(_ => Calculate());
             
             DichotomyShowGraphCommand = new RelayCommand(_ => DichotomyShowGraph());
+            GoldenRatioMinShowGraphCommand = new RelayCommand(_ => GoldenRatioMinShowGraph());
+            GoldenRatioMaxShowGraphCommand = new RelayCommand(_ => GoldenRatioMaxShowGraph());
+        }
+
+        private void GoldenRatioMaxShowGraph()
+        {
+            var showGraphic = new Graph(GoldenRatioMaxValuesHistory, ConvertStringToFunc(FunctionExpression));
+            showGraphic.ShowDialog();
+        }
+
+        private void GoldenRatioMinShowGraph()
+        {
+            var showGraphic = new Graph(GoldenRatioMinValuesHistory, ConvertStringToFunc(FunctionExpression));
+            showGraphic.ShowDialog();
         }
 
         private void DichotomyShowGraph()

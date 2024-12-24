@@ -18,11 +18,12 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             if (pointAValue == 0)
             {
                 return new List<(double, double, double)>() {(0, 0, pointA)};
-            } else if (SolveFunc(function, pointB) == 0)
+            }
+            if (SolveFunc(function, pointB) == 0)
             {
                 return new List<(double, double, double)>() {(0, 0, pointB)};
             }
-            
+
             var valuesHistory = new List<(double, double, double)>() {};
 
             while (pointB - pointA > epsilon)
@@ -50,46 +51,59 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             valuesHistory.Add((pointA, pointB, (pointA + pointB) / 2));
             return valuesHistory;
         }
-
-        //  Поиск точки минимума методом золотого сечения 
-        public static double FindMinimumByGoldenSection(string functionExpression, double parametrA, double parametrB, double epsilon)
+        
+        public static List<(double, double, double)> GoldenRatioMinMethod(Function function, double pointA, double pointB, double epsilon)
         {
-            var expression = ConvertExpressionToFunctionFromString(functionExpression);
-            do
+            var valuesHistory = new List<(double, double, double)>();
+
+            while (Math.Abs(pointB - pointA) > epsilon)
             {
-                var firstDot = parametrB - (parametrB - parametrA) / Phi;
-                var secondDot = parametrA + (parametrB - parametrA) / Phi;
-                if (SolveFunc(expression, firstDot) >= SolveFunc(expression, secondDot))
+                var firstPoint = pointB - (pointB - pointA) / Phi;
+                var secondPoint = pointA + (pointB - pointA) / Phi;
+
+                valuesHistory.Add((pointA, pointB, (firstPoint + secondPoint) / 2)); // Сохраняем границы и среднюю точку
+
+                if (SolveFunc(function, firstPoint) >= SolveFunc(function, secondPoint))
                 {
-                    parametrA = firstDot;
-                } else
-                {
-                    parametrB = secondDot;
+                    pointA = firstPoint;
                 }
-            } while (Math.Abs(parametrB - parametrA) > epsilon);
-            return (parametrA + parametrB) / 2;
+                else
+                {
+                    pointB = secondPoint;
+                }
+            }
+
+            // Добавляем финальную среднюю точку
+            valuesHistory.Add((pointA, pointB, (pointA + pointB) / 2));
+            return valuesHistory;
         }
-
-
-        //  Поиск точки максимума методом золотого сечения 
-        public static double FindMaximumByGoldenSection(string functionExpression, double parametrA, double parametrB, double epsilon)
+        
+        public static List<(double, double, double)> GoldenRatioMaxMethod(Function function, double pointA, double pointB, double epsilon)
         {
-            var expression = ConvertExpressionToFunctionFromString(functionExpression);
-            do
-            {
-                var firstDot = parametrB - (parametrB - parametrA) / Phi;
-                var secondDot = parametrA + (parametrB - parametrA) / Phi;
-                if (SolveFunc(expression, firstDot) <= SolveFunc(expression, secondDot))
-                {
-                    parametrA = firstDot;
-                } else
-                {
-                    parametrB = secondDot;
-                }
-            } while (Math.Abs(parametrB - parametrA) > epsilon);
-            return (parametrA + parametrB) / 2;
-        }
+            var valuesHistory = new List<(double, double, double)>();
 
+            while (Math.Abs(pointB - pointA) > epsilon)
+            {
+                var firstPoint = pointB - (pointB - pointA) / Phi;
+                var secondPoint = pointA + (pointB - pointA) / Phi;
+
+                valuesHistory.Add((pointA, pointB, (firstPoint + secondPoint) / 2)); // Сохраняем границы и среднюю точку
+
+                if (SolveFunc(function, firstPoint) <= SolveFunc(function, secondPoint))
+                {
+                    pointA = firstPoint;
+                }
+                else
+                {
+                    pointB = secondPoint;
+                }
+            }
+
+            // Добавляем финальную среднюю точку
+            valuesHistory.Add((pointA, pointB, (pointA + pointB) / 2));
+            return valuesHistory;
+        }
+        
         // Поиск точки пересечения (нуль функции) методом Ньютона
         public static double FindPointOfIntersectionNewtonMethod(string functionExpression, double parametrB)
         {
@@ -116,6 +130,12 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         //  Метод для вычисления значения функции в точке x
         public static double SolveFunc(Function function, double x)
         {
+            return new Expression($"f({x.ToString().Replace(",", ".")})", function).calculate();
+        }
+        
+        public static double SolveFunc(string functionString, double x)
+        {
+            var function = ConvertExpressionToFunctionFromString(functionString);
             return new Expression($"f({x.ToString().Replace(",", ".")})", function).calculate();
         }
 

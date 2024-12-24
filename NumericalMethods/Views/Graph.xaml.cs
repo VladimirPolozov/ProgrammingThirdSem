@@ -9,7 +9,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Views
         public Graph(List<(double, double, double)> valuesHistory, Function function)
         {
             InitializeComponent();
-            DataContext = new GraphViewModel(valuesHistory, function);
+            DataContext = new GraphViewModel(valuesHistory, function, this);
         }
     }
 }

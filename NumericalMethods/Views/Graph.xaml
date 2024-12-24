@@ -15,6 +15,18 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="25 0 25 0">
+      <Grid Margin="0 0 0  25">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding IterationsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+          <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&lt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Margin="0 0 4 0" Command="{Binding ShowPreviousIterationCommand}"/>
+          <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&gt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Command="{Binding ShowNextIterationCommand}"/>
+        </StackPanel>
+      </Grid>
       <TextBlock Margin="0 0 0 5px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Отображение графика</TextBlock>
       <Grid Margin="0 0 0 5">
         <Grid.ColumnDefinitions>
@@ -55,12 +67,15 @@
           </ComboBox>
         </StackPanel>
       </Grid>
-      <Button Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Margin="0 0 0 20">Построить график функции</Button>
-      <StackPanel Orientation="Horizontal">
-        <TextBlock FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding IterationsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-        <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&lt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Margin="0 0 4 0" Command="{Binding ShowPreviousIterationCommand}"/>
-        <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&gt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Command="{Binding ShowNextIterationCommand}"/>
-      </StackPanel>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding CloseCommand}" Content="Закрыть" Margin="0 0 5 0"/>
+        <Button Grid.Column="1" Grid.ColumnSpan="2" Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Content="Обновить график" Margin="5 0 0 0"/>
+      </Grid>
     </StackPanel>
     <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
     <StackPanel Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 50 20 50">

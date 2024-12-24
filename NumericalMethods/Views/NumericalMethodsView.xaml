@@ -47,7 +47,10 @@
         <TextBlock Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding ParabolaMethodResult}"/>
         <TextBlock Grid.Column="2" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">График</TextBlock>
         <Button Grid.Column="2" Grid.Row="1" Content="Открыть" Command="{Binding DichotomyShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
-        <Button Grid.Column="2" Grid.Row="2" Content="Открыть" Command="{Binding GoldenRatioShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+          <Button Content="min" Command="{Binding GoldenRatioMinShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
+          <Button Content="max" Command="{Binding GoldenRatioMaxShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
+        </StackPanel>
         <Button Grid.Column="2" Grid.Row="3" Content="Открыть" Command="{Binding NewtonShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="4" Content="Открыть" Command="{Binding CoordinateDescentShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="5" Content="Открыть" Command="{Binding RectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
