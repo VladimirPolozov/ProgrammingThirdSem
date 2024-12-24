@@ -34,3 +34,15 @@ D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThir
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\Programm.0CDFCF1C.Up2Date
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.exe
 D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem.pdb
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\obj\Debug\ProgrammingThirdSem_Content.g.cs
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\DotNetEnv.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Configuration.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Primitives.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Sprache.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Configuration.xml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.xml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Microsoft.Extensions.Primitives.xml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\Sprache.xml
+D:\vladimirpolozov\KemSU_3Semester\ProgrammingThirdSem\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml

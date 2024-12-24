@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Xml;
 using org.mariuszgromada.math.mxparser;
 using ProgrammingThirdSem.NumericalMethods.Models;
 using ProgrammingThirdSem.NumericalMethods.Views;
@@ -177,7 +182,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private List<(double, double, double)> _goldenRatioMinValuesHistory;
         private List<double> _newtonNullNullValuesHistory;
         private List<double> _newtonExtremeValuesHistory;
-        private List<(double, double, double)> _coordinateDescentValuesHistory;
         private List<(double, double, double)> _rectangleValuesHistory;
         private List<(double, double, double)> _trapezoidValuesHistory;
         private List<(double, double, double)> _parabolaValuesHistory;
@@ -229,16 +233,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             {
                 _newtonExtremeValuesHistory = value;
                 OnPropertyChanged(nameof(NewtonExtremeValuesHistory));
-            }
-        }
-        
-        public List<(double, double, double)> CoordinateDescentValuesHistory
-        {
-            get => _coordinateDescentValuesHistory;
-            set
-            {
-                _coordinateDescentValuesHistory = value;
-                OnPropertyChanged(nameof(CoordinateDescentValuesHistory));
             }
         }
 
@@ -352,6 +346,36 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 throw new Exception(e.Message);
             }
 
+            if (FunctionExpressionString.ToLower().Contains("x") && FunctionExpressionString.ToLower().Contains("y") &&
+                IsCoordinateDescentMethodChecked)
+            {
+                var resultMinX = RoundItem(
+                    NumericalMethodsModel.CoordinateDescentMethod(
+                        FunctionExpressionString, ParameterA, ParameterB, Epsilon, true
+                        ).Item1, SingsAfterCommaCount
+                    );
+                var resultMinY = RoundItem(
+                    NumericalMethodsModel.CoordinateDescentMethod(
+                        FunctionExpressionString, ParameterA, ParameterB, Epsilon, true
+                        ).Item2, SingsAfterCommaCount
+                    );
+                var resultMaxX = RoundItem(
+                    NumericalMethodsModel.CoordinateDescentMethod(
+                        FunctionExpressionString, ParameterA, ParameterB, Epsilon, false
+                        ).Item1, SingsAfterCommaCount
+                    );
+                var resultMaxY = RoundItem(
+                    NumericalMethodsModel.CoordinateDescentMethod(
+                        FunctionExpressionString, ParameterA, ParameterB, Epsilon, false
+                        ).Item2, SingsAfterCommaCount
+                    );
+                CoordinateDescentMethodResult = $"min: ({resultMinX}; {resultMinY}), max: ({resultMaxX}; {resultMaxY})";
+            }
+            else
+            {
+                return;
+            }
+
             if (IsDichotomyMethodChecked)
             {
                 DichotomyValuesHistory = NumericalMethodsModel.DichotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
@@ -404,6 +428,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         public ICommand GoldenRatioMaxShowGraphCommand { get; }
         public ICommand NewtonNullShowGraphCommand { get; }
         public ICommand NewtonExtremeShowGraphCommand { get; }
+        public ICommand CoordinateDescentShowGraphCommand { get; }
 
         public NumericalMethodsViewModel()
         {
@@ -417,6 +442,95 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             GoldenRatioMaxShowGraphCommand = new RelayCommand(_ => GoldenRatioMaxShowGraph());
             NewtonNullShowGraphCommand = new RelayCommand(_ => NewtonNullShowGraph());
             NewtonExtremeShowGraphCommand = new RelayCommand(_ => NewtonExtremeShowGraph());
+            CoordinateDescentShowGraphCommand = new RelayCommand(_ => CoordinateDescentShowGraph());
+        }
+        
+        private async void CoordinateDescentShowGraph()
+        {
+            try
+            {
+                // Создаем HttpClient
+                using (var client = new HttpClient())
+                {
+                    var wolframAlphaAppId = "";
+                    // Формируем URL-запрос к Wolfram Alpha
+                    var encodedFunction = Uri.EscapeDataString(FunctionExpressionString);
+                    var url = $"https://api.wolframalpha.com/v2/query?" +
+                              $"appid={wolframAlphaAppId}" +
+                              $"&input=extrema({encodedFunction})" +
+                              "&format=image";
+
+                    // Выполняем HTTP-запрос
+                    var response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+
+                    // Получаем XML-ответ
+                    var xmlContent = await response.Content.ReadAsStringAsync();
+
+                    // Парсим XML для получения ссылки на изображение
+                    var imageUrl = ExtractImageUrlFromXml(xmlContent);
+
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        throw new Exception("Не удалось извлечь ссылку на изображение из ответа.");
+                    }
+
+                    // Получаем изображение по URL
+                    var imageBytes = await client.GetByteArrayAsync(imageUrl);
+
+                    // Сохраняем изображение локально
+                    // var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "graph.png");
+                    // File.WriteAllBytes(filePath, imageBytes); // Используем синхронный метод
+                    // MessageBox.Show($"Изображение сохранено по пути: {filePath}", "Сохранение изображения", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Создаем новое окно для отображения графика
+                    var graphWindow = new Window
+                    {
+                        Title = $"Graph of {FunctionExpressionString}",
+                        Width = 400,
+                        Height = 300
+                    };
+
+                    // Создаем Image контрол
+                    var image = new System.Windows.Controls.Image();
+
+                    // Конвертируем байты в изображение
+                    using (var ms = new MemoryStream(imageBytes))
+                    {
+                        var bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = ms;
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        bitmap.Freeze(); // Важно для многопоточности
+
+                        image.Source = bitmap;
+                    }
+
+                    // Устанавливаем изображение как содержимое окна
+                    graphWindow.Content = image;
+
+                    // Показываем окно
+                    graphWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при получении графика: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static string ExtractImageUrlFromXml(string xmlContent)
+        {
+            // Загружаем XML в XmlDocument
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlContent);
+
+            // Находим элемент <img> внутри <subpod> с id="Plot3D"
+            var imgNode = xmlDoc.SelectSingleNode("//pod[@id='Plot3D']/subpod/img");
+
+            // Если элемент найден, возвращаем значение атрибута src
+            return imgNode?.Attributes["src"]?.Value;
         }
 
         private void NewtonExtremeShowGraph()

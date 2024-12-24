@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using org.mariuszgromada.math.mxparser;
 using Expression = org.mariuszgromada.math.mxparser.Expression;
@@ -150,6 +151,34 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             }
 
             return valuesHistory;
+        }
+        
+        public static (double, double) CoordinateDescentMethod(string functionExpression, double pointA, double pointB, double epsilon, bool isMinimumSearched)
+        {
+            var middlePoint = (pointA + pointB) / 2;
+            double pointX, pointY;
+            var nextPointX = middlePoint;
+            var nextPointY = middlePoint;
+
+            do
+            {
+                pointX = nextPointX;
+                pointY = nextPointY;
+
+                var functionAccordingX = ConvertExpressionToFunctionFromString(
+                    functionExpression.Replace("y", pointY.ToString()));
+                nextPointX = isMinimumSearched ?
+                    GoldenRatioMinMethod(functionAccordingX, pointA, pointB, epsilon).Last().Item3 :
+                    GoldenRatioMaxMethod(functionAccordingX, pointA, pointB, epsilon).Last().Item3;
+
+                var functionAccordingY = ConvertExpressionToFunctionFromString(
+                    functionExpression.Replace("x", pointX.ToString()));
+                nextPointY = isMinimumSearched ?
+                    GoldenRatioMinMethod(functionAccordingY, pointA, pointB, epsilon).Last().Item3 :
+                    GoldenRatioMaxMethod(functionAccordingY, pointA, pointB, epsilon).Last().Item3;
+            } while (Math.Abs(nextPointX - pointX) > epsilon || Math.Abs(nextPointY - pointY) > epsilon);
+
+            return (nextPointX, nextPointY);
         }
 
         private static double GetDerivative(Function function, double point)
