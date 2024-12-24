@@ -6,10 +6,15 @@ namespace ProgrammingThirdSem.NumericalMethods.Views
 {
     public partial class Graph
     {
+        public Graph(List<double> valuesHistory, Function function)
+        {
+            InitializeComponent();
+            DataContext = new GraphViewModel<double>(valuesHistory, function, this);
+        }
         public Graph(List<(double, double, double)> valuesHistory, Function function)
         {
             InitializeComponent();
-            DataContext = new GraphViewModel(valuesHistory, function, this);
+            DataContext = new GraphViewModel<(double, double, double)>(valuesHistory, function, this);
         }
     }
 }

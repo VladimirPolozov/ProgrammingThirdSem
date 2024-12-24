@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using org.mariuszgromada.math.mxparser;
 using OxyPlot;
@@ -12,7 +13,7 @@ using ProgrammingThirdSem.NumericalMethods.Models;
 
 namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
-    public class GraphViewModel : INotifyPropertyChanged
+    public class GraphViewModel<T> : INotifyPropertyChanged
     {
         private readonly Function _function;
         private double _targetDotCoord;
@@ -124,7 +125,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         }
         
         // Сохраняем историю вычислений
-        private List<(double, double, double)> ValuesHistory { get; }
+        private List<double> ValuesHistoryDoubleList { get; }
+        private List<(double, double, double)> ValuesHistoryTupleList { get; }
         private string _iterationsInfo;
         private readonly Window _window;
 
@@ -201,63 +203,92 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         public ICommand ShowNextIterationCommand { get; }
         public ICommand ShowPreviousIterationCommand { get; }
         
-        public GraphViewModel(List<(double, double, double)> valuesHistory, Function function, Window window)
+        public GraphViewModel(List<T> valuesHistory, Function function, Window window)
         {
-            ValuesHistory = valuesHistory;
             _function = function;
-            IterationsCount = ValuesHistory.Count;
-            CurrentIterationIndex = IterationsCount - 1;
-            
-            TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
-            AdditionalDotsCoord = new List<double>() {ValuesHistory.Last().Item1, ValuesHistory.Last().Item2};
+            _window = window;
+
+            if (valuesHistory is List<(double, double, double)> tupleList)
+            {
+                ValuesHistoryTupleList = tupleList;
+                IterationsCount = ValuesHistoryTupleList.Count;
+                CurrentIterationIndex = IterationsCount - 1;
+                TargetDotCoord = ValuesHistoryTupleList[CurrentIterationIndex].Item3;
+                AdditionalDotsCoord = new List<double>() {ValuesHistoryTupleList.Last().Item1, ValuesHistoryTupleList.Last().Item2};
+                
+                ShowNextIterationCommand = new RelayCommand(_ => NextIterationTupleList());
+                ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIterationTupleList());
+            } else if (valuesHistory is List<double> doubleList)
+            {
+                ValuesHistoryDoubleList = doubleList;
+                IterationsCount = ValuesHistoryDoubleList.Count;
+                CurrentIterationIndex = IterationsCount - 1;
+                TargetDotCoord = ValuesHistoryDoubleList[CurrentIterationIndex];
+                AdditionalDotsCoord = new List<double>();
+                
+                ShowNextIterationCommand = new RelayCommand(_ => NextIterationDoubleList());
+                ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIterationDoubleList());
+            }
+            else
+            {
+                throw new ArgumentException("Передан неверный тип данных");
+            }
             
             UpdateGraph();
             
             ConstructGraphCommand = new RelayCommand(_ => UpdateGraph());
-            ShowNextIterationCommand = new RelayCommand(_ => NextIteration());
-            ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIteration());
             CloseCommand = new RelayCommand(_ => CloseWindow());
-            
-            _window = window;
+        }
+
+        private void NextIterationDoubleList()
+        {
+            if (CurrentIterationIndex + 1 == IterationsCount)
+            {
+                CurrentIterationIndex = -1;
+            }
+            ++CurrentIterationIndex;
+            TargetDotCoord = ValuesHistoryDoubleList[CurrentIterationIndex];
+            UpdateGraph();
+        }
+
+        private void PreviousIterationDoubleList()
+        {
+            if (CurrentIterationIndex == 0)
+            {
+                CurrentIterationIndex = IterationsCount;
+            }
+            --CurrentIterationIndex;
+            TargetDotCoord = ValuesHistoryDoubleList[CurrentIterationIndex];
+            UpdateGraph();  
+        }
+
+        private void NextIterationTupleList()
+        {
+            if (CurrentIterationIndex + 1 == IterationsCount)
+            {
+                CurrentIterationIndex = -1;
+            }
+            ++CurrentIterationIndex;
+            TargetDotCoord = ValuesHistoryTupleList[CurrentIterationIndex].Item3;
+            AdditionalDotsCoord = new List<double>() {ValuesHistoryTupleList[CurrentIterationIndex].Item1, ValuesHistoryTupleList[CurrentIterationIndex].Item2};
+            UpdateGraph();
+        }
+
+        private void PreviousIterationTupleList()
+        {
+            if (CurrentIterationIndex == 0)
+            {
+                CurrentIterationIndex = IterationsCount;
+            }
+            --CurrentIterationIndex;
+            TargetDotCoord = ValuesHistoryTupleList[CurrentIterationIndex].Item3;
+            AdditionalDotsCoord = new List<double>() {ValuesHistoryTupleList[CurrentIterationIndex].Item1, ValuesHistoryTupleList[CurrentIterationIndex].Item2};
+            UpdateGraph();
         }
 
         private void CloseWindow()
         {
             _window.Close();
-        }
-
-        private void PreviousIteration()
-        {
-            if (CurrentIterationIndex == 0)
-            {
-                CurrentIterationIndex = IterationsCount - 1;
-            }
-            else
-            {
-                --CurrentIterationIndex;
-            
-                TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
-                AdditionalDotsCoord = new List<double>() {ValuesHistory[CurrentIterationIndex].Item1, ValuesHistory[CurrentIterationIndex].Item2};
-            
-                UpdateGraph();   
-            }
-        }
-
-        private void NextIteration()
-        {
-            if (CurrentIterationIndex + 1 == IterationsCount)
-            {
-                CurrentIterationIndex = 0;
-            }
-            else
-            {
-                ++CurrentIterationIndex;
-            
-                TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
-                AdditionalDotsCoord = new List<double>() {ValuesHistory[CurrentIterationIndex].Item1, ValuesHistory[CurrentIterationIndex].Item2};
-            
-                UpdateGraph();   
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -175,7 +175,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private List<(double, double, double)> _dichotomyValuesHistory;
         private List<(double, double, double)> _goldenRatioMaxValuesHistory;
         private List<(double, double, double)> _goldenRatioMinValuesHistory;
-        private List<(double, double, double)> _newtonValuesHistory;
+        private List<double> _newtonNullNullValuesHistory;
+        private List<double> _newtonExtremeValuesHistory;
         private List<(double, double, double)> _coordinateDescentValuesHistory;
         private List<(double, double, double)> _rectangleValuesHistory;
         private List<(double, double, double)> _trapezoidValuesHistory;
@@ -211,13 +212,23 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
         
-        public List<(double, double, double)> NewtonValuesHistory
+        public List<double> NewtonNullValuesHistory
         {
-            get => _newtonValuesHistory;
+            get => _newtonNullNullValuesHistory;
             set
             {
-                _newtonValuesHistory = value;
-                OnPropertyChanged(nameof(NewtonValuesHistory));
+                _newtonNullNullValuesHistory = value;
+                OnPropertyChanged(nameof(NewtonNullValuesHistory));
+            }
+        }
+        
+        public List<double> NewtonExtremeValuesHistory
+        {
+            get => _newtonExtremeValuesHistory;
+            set
+            {
+                _newtonExtremeValuesHistory = value;
+                OnPropertyChanged(nameof(NewtonExtremeValuesHistory));
             }
         }
         
@@ -261,18 +272,29 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        private string _functionExpression;
+        private string _functionExpressionString;
+        private Function _functionExpression;
         private double _parameterA;
         private double _parameterB;
         private double _epsilon;
         private int _singsAfterCommaCount;
 
-        public string FunctionExpression
+        public string FunctionExpressionString
+        {
+            get => _functionExpressionString;
+            set
+            {
+                _functionExpressionString = value.ToLower();
+                OnPropertyChanged(nameof(FunctionExpressionString));
+            }
+        }
+        
+        public Function FunctionExpression
         {
             get => _functionExpression;
             set
             {
-                _functionExpression = value.ToLower();
+                _functionExpression = value;
                 OnPropertyChanged(nameof(FunctionExpression));
             }
         }
@@ -320,81 +342,48 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private void Calculate()
         {
             ClearData();
-
-            if (IsDichotomyMethodChecked)
-            {
-                ExecuteCalculation(
-                    NumericalMethodsModel.DichotomyMethod,
-                    FunctionExpression,
-                    ParameterA,
-                    ParameterB,
-                    Epsilon,
-                    out var result
-                );
-
-                DichotomyValuesHistory = result;
-                DichotomyMethodResult = RoundItem(DichotomyValuesHistory.Last().Item3, SingsAfterCommaCount).ToString();
-            }
-
-            if (IsGoldenRatioMethodChecked)
-            {
-                ExecuteCalculation(
-                    NumericalMethodsModel.GoldenRatioMinMethod,
-                    FunctionExpression,
-                    ParameterA,
-                    ParameterB,
-                    Epsilon,
-                    out var result
-                );
-                GoldenRatioMinValuesHistory = result;
-                
-                ExecuteCalculation(
-                    NumericalMethodsModel.GoldenRatioMaxMethod,
-                    FunctionExpression,
-                    ParameterA,
-                    ParameterB,
-                    Epsilon,
-                    out result
-                    );
-                GoldenRatioMaxValuesHistory = result;
-                
-                var minResult = RoundItem(GoldenRatioMinValuesHistory.Last().Item3, SingsAfterCommaCount);
-                var maxResult = RoundItem(GoldenRatioMaxValuesHistory.Last().Item3, SingsAfterCommaCount);
-                GoldenRatioMethodResult = $"min: {minResult}; max: {maxResult}";
-            }
-        }
-
-        private static double RoundItem(double item3, int singsAfterCommaCount)
-        {
-            return Math.Round(item3, singsAfterCommaCount, MidpointRounding.AwayFromZero);
-        }
-
-        private static void ExecuteCalculation(
-            CalculationMethod calculationMethod,
-            string functionExpression,
-            double parameterA,
-            double parameterB,
-            double epsilon,
-            out List<(double, double, double)> result
-            )
-        {
+            
             try
             {
-                var function = ConvertStringToFunc(functionExpression);
-                result = calculationMethod(function, parameterA, parameterB, epsilon);
+                FunctionExpression = ConvertStringToFunc(FunctionExpressionString);
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
+            if (IsDichotomyMethodChecked)
+            {
+                DichotomyValuesHistory = NumericalMethodsModel.DichotomyMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                DichotomyMethodResult = RoundItem(DichotomyValuesHistory.Last().Item3, SingsAfterCommaCount).ToString();
+            }
+            
+            if (IsGoldenRatioMethodChecked)
+            {
+                GoldenRatioMinValuesHistory = NumericalMethodsModel.GoldenRatioMinMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                GoldenRatioMaxValuesHistory = NumericalMethodsModel.GoldenRatioMaxMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                GoldenRatioMethodResult = $"min: {RoundItem(GoldenRatioMinValuesHistory.Last().Item3, SingsAfterCommaCount)}; " +
+                                          $"max: {RoundItem(GoldenRatioMaxValuesHistory.Last().Item3, SingsAfterCommaCount)}";
+            }
+
+            if (IsNewtonMethodChecked)
+            {
+                NewtonNullValuesHistory = NumericalMethodsModel.NewtonNullMethod(FunctionExpression, ParameterB, Epsilon);
+                NewtonExtremeValuesHistory = NumericalMethodsModel.NewtonExtremeMethod(FunctionExpression, ParameterB, Epsilon);
+                NewtonMethodResult = $"null: {RoundItem(NewtonNullValuesHistory.Last(), SingsAfterCommaCount).ToString()}; " +
+                                     $"extreme: {RoundItem(NewtonExtremeValuesHistory.Last(), SingsAfterCommaCount).ToString()}";
+            }
+        }
+
+        private static double RoundItem(double item, int singsAfterCommaCount)
+        {
+            return Math.Round(item, singsAfterCommaCount, MidpointRounding.AwayFromZero);
         }
 
         private static Function ConvertStringToFunc(string functionExpression)
         {
             return new Function("f(x) = " + functionExpression);
         }
-
-        private delegate List<(double, double, double)> CalculationMethod(Function function, double parameterA, double parameterB, double epsilon);
 
         private void ClearData()
         {
@@ -413,6 +402,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         public ICommand DichotomyShowGraphCommand { get; }
         public ICommand GoldenRatioMinShowGraphCommand { get; }
         public ICommand GoldenRatioMaxShowGraphCommand { get; }
+        public ICommand NewtonNullShowGraphCommand { get; }
+        public ICommand NewtonExtremeShowGraphCommand { get; }
 
         public NumericalMethodsViewModel()
         {
@@ -424,29 +415,63 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             DichotomyShowGraphCommand = new RelayCommand(_ => DichotomyShowGraph());
             GoldenRatioMinShowGraphCommand = new RelayCommand(_ => GoldenRatioMinShowGraph());
             GoldenRatioMaxShowGraphCommand = new RelayCommand(_ => GoldenRatioMaxShowGraph());
+            NewtonNullShowGraphCommand = new RelayCommand(_ => NewtonNullShowGraph());
+            NewtonExtremeShowGraphCommand = new RelayCommand(_ => NewtonExtremeShowGraph());
+        }
+
+        private void NewtonExtremeShowGraph()
+        {
+            if (NewtonExtremeValuesHistory.Count == 0)
+            {
+                Calculate();
+            }
+            var showGraphic = new Graph(NewtonExtremeValuesHistory, FunctionExpression);
+            showGraphic.ShowDialog();
+        }
+
+        private void NewtonNullShowGraph()
+        {
+            if (NewtonNullValuesHistory.Count == 0)
+            {
+                Calculate();
+            }
+            var showGraphic = new Graph(NewtonNullValuesHistory, FunctionExpression);
+            showGraphic.ShowDialog();
         }
 
         private void GoldenRatioMaxShowGraph()
         {
-            var showGraphic = new Graph(GoldenRatioMaxValuesHistory, ConvertStringToFunc(FunctionExpression));
+            if (GoldenRatioMaxValuesHistory.Count == 0)
+            {
+                Calculate();
+            }
+            var showGraphic = new Graph(GoldenRatioMaxValuesHistory, FunctionExpression);
             showGraphic.ShowDialog();
         }
 
         private void GoldenRatioMinShowGraph()
         {
-            var showGraphic = new Graph(GoldenRatioMinValuesHistory, ConvertStringToFunc(FunctionExpression));
+            if (GoldenRatioMinValuesHistory.Count == 0)
+            {
+                Calculate();
+            }
+            var showGraphic = new Graph(GoldenRatioMinValuesHistory, FunctionExpression);
             showGraphic.ShowDialog();
         }
 
         private void DichotomyShowGraph()
         {
-            var showGraphic = new Graph(DichotomyValuesHistory, ConvertStringToFunc(FunctionExpression));
+            if (DichotomyValuesHistory.Count == 0)
+            {
+                Calculate();
+            }
+            var showGraphic = new Graph(DichotomyValuesHistory, FunctionExpression);
             showGraphic.ShowDialog();
         }
 
         private void SetDefaultData()
         {
-            FunctionExpression = "x";
+            FunctionExpressionString = "x";
             ParameterA = -50;
             ParameterB = 50;
             Epsilon = 0.01;

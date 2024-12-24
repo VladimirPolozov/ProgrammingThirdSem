@@ -105,21 +105,51 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         }
         
         // Поиск точки пересечения (нуль функции) методом Ньютона
-        public static double FindPointOfIntersectionNewtonMethod(string functionExpression, double parametrB)
+        public static List<double> NewtonNullMethod(Function function, double pointB, double epsilon)
         {
-            var expression = ConvertExpressionToFunctionFromString(functionExpression);
-            return parametrB - (SolveFunc(expression, parametrB) / GetDerivative(expression, parametrB));
+            var valuesHistory = new List<double>() {pointB};
+
+            while (true)
+            {
+                var functionValue = SolveFunc(function, pointB);
+                var derivativeValue = GetDerivative(function, pointB);
+                
+                if (Math.Abs(functionValue) < epsilon)
+                {
+                    break; // Достигли нуля функции
+                }
+
+                pointB -= functionValue / derivativeValue; // Обновляем точку
+                valuesHistory.Add(pointB); // Сохраняем текущее значение точки, значение функции и значение производной
+            }
+
+            return valuesHistory;
         }
 
         // Поиск экстремума (точка минимума или максимума) методом Ньютона
-        public static double FindExtremeNewtonMethod(string functionExpression, double parametrB)
+        public static List<double> NewtonExtremeMethod(Function function, double pointB, double epsilon)
         {
-            var argument = new Argument($"x = {parametrB}");
-            var firstDerivative = new Expression($"der(({functionExpression}), x)", argument);
-            var secondDerivative = new Expression($"der(der({functionExpression}, x), x)", argument);
-            var firstDerivativeValue = firstDerivative.calculate();
-            var secondDerivativeValue = secondDerivative.calculate();
-            return parametrB - (firstDerivativeValue / secondDerivativeValue);
+            var valuesHistory = new List<double>() {pointB};
+
+            while (true)
+            {
+                var derivativeValue = GetDerivative(function, pointB);
+                var secondDerivativeValue = GetDerivative(function, pointB + DefaultDelta); // Для вычисления второй производной
+
+                // Проверяем, если производная слишком мала, чтобы избежать деления на ноль
+                if (Math.Abs(derivativeValue) < epsilon)
+                {
+                    break; // Достигли точки экстремума
+                }
+
+                // Обновляем точку
+                pointB -= derivativeValue / secondDerivativeValue; // Используем вторую производную для обновления точки
+                
+                // Сохраняем текущее значение точки, значение производной и вторую производную
+                valuesHistory.Add(pointB);
+            }
+
+            return valuesHistory;
         }
 
         private static double GetDerivative(Function function, double point)

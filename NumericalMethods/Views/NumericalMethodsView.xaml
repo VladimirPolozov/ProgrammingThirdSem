@@ -51,7 +51,10 @@
           <Button Content="min" Command="{Binding GoldenRatioMinShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
           <Button Content="max" Command="{Binding GoldenRatioMaxShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
         </StackPanel>
-        <Button Grid.Column="2" Grid.Row="3" Content="Открыть" Command="{Binding NewtonShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+          <Button Content="null" Command="{Binding NewtonNullShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
+          <Button Content="extreme" Command="{Binding NewtonExtremeShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
+        </StackPanel>
         <Button Grid.Column="2" Grid.Row="4" Content="Открыть" Command="{Binding CoordinateDescentShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="5" Content="Открыть" Command="{Binding RectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <Button Grid.Column="2" Grid.Row="6" Content="Открыть" Command="{Binding TrapezoidShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
@@ -68,7 +71,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 24 0">
           <TextBlock Margin="0 0 0 5px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Функция</TextBlock>
-          <TextBox Margin="0 21 0 0px" Padding="4 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding FunctionExpression, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gainsboro"></TextBox>
+          <TextBox Margin="0 21 0 0px" Padding="4 2px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Text="{Binding FunctionExpressionString, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Gainsboro"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1">
           <TextBlock Margin="0 0 0 5px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" TextWrapping="Wrap">Границы интервала (a, b)</TextBlock>
