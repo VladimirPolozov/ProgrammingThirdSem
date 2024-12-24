@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpf="http://oxyplot.org/wpf"
-        xmlns:viewModels="clr-namespace:ProgrammingThirdSem.NumericalMethods.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=viewModels:GraphViewModel}"
         Title="Graph" Height="600" Width="900">
+  <d:Window.DataContext>
+    <d:DesignInstance Type="viewModels:GraphViewModel" />
+  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="300" />
