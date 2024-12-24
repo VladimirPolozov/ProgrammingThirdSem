@@ -23,7 +23,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
                 return new List<(double, double, double)>() {(0, 0, pointB)};
             }
             
-            var valuesHistory = new List<(double, double, double)>();
+            var valuesHistory = new List<(double, double, double)>() {};
 
             while (pointB - pointA > epsilon)
             {
@@ -120,7 +120,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
         }
 
         // конвертирует выражение из типа строка в тип Function
-        public static Function ConvertExpressionToFunctionFromString(string functionExpression)
+        private static Function ConvertExpressionToFunctionFromString(string functionExpression)
         {
             return new Function("f(x) = " + functionExpression);
         }

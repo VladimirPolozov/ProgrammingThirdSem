@@ -7,10 +7,10 @@
         xmlns:viewModels="clr-namespace:ProgrammingThirdSem.NumericalMethods.ViewModels"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:GraphViewModel}"
-        Title="Graph" Height="350" Width="700">
+        Title="Graph" Height="600" Width="900">
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="350" />
+      <ColumnDefinition Width="300" />
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
@@ -55,9 +55,12 @@
           </ComboBox>
         </StackPanel>
       </Grid>
-      <Button Height="30px" FontSize="14px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Margin="0 0 0 20">Построить график функции</Button>
-      <TextBlock FontSize="14px" FontFamily="Montserrat" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding ResultText}" ></TextBlock>
-      <TextBlock Text="{Binding IterationsInfo}"/>
+      <Button Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Margin="0 0 0 20">Построить график функции</Button>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding IterationsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
+        <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&lt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Margin="0 0 4 0" Command="{Binding ShowPreviousIterationCommand}"/>
+        <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&gt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Command="{Binding ShowNextIterationCommand}"/>
+      </StackPanel>
     </StackPanel>
     <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
     <StackPanel Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 50 20 50">

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using org.mariuszgromada.math.mxparser;
 using OxyPlot;
@@ -11,6 +13,30 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
     public class GraphViewModel : INotifyPropertyChanged
     {
+        private readonly Function _function;
+        private double _targetDotCoord;
+        private List<double> _additionalDotsCoord;
+        
+        public double TargetDotCoord
+        {
+            get => _targetDotCoord;
+            set
+            {
+                _targetDotCoord = value;
+                OnPropertyChanged(nameof(TargetDotCoord));
+            }
+        }
+        
+        public List<double> AdditionalDotsCoord
+        {
+            get => _additionalDotsCoord;
+            set
+            {
+                _additionalDotsCoord = value;
+                OnPropertyChanged(nameof(AdditionalDotsCoord));
+            }
+        }
+        
         // основной класс в библиотеке OxyPlot, используемый для создания графиков
         private PlotModel _plotModel;
         
@@ -79,7 +105,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             get => _iterationsCount;
             set
             {
-                _iterationsCount = value;   
+                _iterationsCount = value;
+                IterationsInfo = $"Итерация №{CurrentIterationIndex + 1} из {IterationsCount}";
                 OnPropertyChanged(nameof(IterationsCount));
             }
         }
@@ -90,18 +117,30 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             set
             {
                 _currentIterationIndex = value;
+                IterationsInfo = $"Итерация №{CurrentIterationIndex + 1} из {IterationsCount}";
                 OnPropertyChanged(nameof(CurrentIterationIndex));
             }
         }
         
-        public string IterationsInfo => $"Итерация №{CurrentIterationIndex} из {IterationsCount}";
+        // Сохраняем историю вычислений
+        private List<(double, double, double)> ValuesHistory { get; }
+        private string _iterationsInfo;
 
-        private void ConstructGraph(List<(double, double, double)> valuesHistory, Function function)
+        public string IterationsInfo
+        {
+            get => _iterationsInfo;
+            set
+            {
+                _iterationsInfo = value;
+                OnPropertyChanged(nameof(IterationsInfo));
+            }
+        }
+
+        private void UpdateGraph()
         {
             // Обновляем график
             PlotModel = new PlotModel { Title = "График функции" };
             var series = new LineSeries { Title = "f(x)", StrokeThickness = GraphicThickness };
-            var mark = new LineSeries { Title = "f(x)", StrokeThickness = 1, Color = OxyColors.Blue };
 
             // Настройка оси X
             var xAxis = new LinearAxis
@@ -132,30 +171,84 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             PlotModel.Axes.Add(yAxis);
             
             // Рисуем график
-            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += _graphicPointsDelta)
+            for (var x = xAxis.Minimum; x <= xAxis.Maximum; x += GraphicPointsDelta)
             {
-                var y = NumericalMethodsModel.SolveFunc(function, x);
+                var y = NumericalMethodsModel.SolveFunc(_function, x);
                 series.Points.Add(new DataPoint(x, y));
             }
-
-            // Рисуем вертикальную линию
-            for (var y = yAxis.Minimum; y <= yAxis.Maximum; y += 1)
+            
+            var targetDot = new ScatterSeries { Title = "Точки пересечения", MarkerType = MarkerType.Circle, MarkerSize = 4, MarkerFill = OxyColors.Red };
+            var targetDotCoordValue = NumericalMethodsModel.SolveFunc(_function, TargetDotCoord);
+            targetDot.Points.Add(new ScatterPoint(TargetDotCoord, targetDotCoordValue));
+            
+            var additionalDots = new ScatterSeries { Title = "Точки пересечения", MarkerType = MarkerType.Circle, MarkerSize = 2, MarkerFill = OxyColors.Blue };
+            foreach (var dot in AdditionalDotsCoord)
             {
-                // mark.Points.Add(new DataPoint(markCoordX, y));
+                var dotValue = NumericalMethodsModel.SolveFunc(_function, dot);
+                additionalDots.Points.Add(new ScatterPoint(dot, dotValue));
             }
 
             PlotModel.Series.Add(series);
-            PlotModel.Series.Add(mark);
+            PlotModel.Series.Add(targetDot);
+            PlotModel.Series.Add(additionalDots);
             PlotModel.InvalidatePlot(true);
         }
         
         public ICommand ConstructGraphCommand { get; }
+        public ICommand ShowNextIterationCommand { get; }
+        public ICommand ShowPreviousIterationCommand { get; }
         
         public GraphViewModel(List<(double, double, double)> valuesHistory, Function function)
         {
-            ConstructGraphCommand = new RelayCommand(_ => ConstructGraph(valuesHistory, function));
+            ValuesHistory = valuesHistory;
+            _function = function;
+            IterationsCount = ValuesHistory.Count;
+            CurrentIterationIndex = IterationsCount - 1;
+            
+            TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
+            AdditionalDotsCoord = new List<double>() {ValuesHistory.Last().Item1, ValuesHistory.Last().Item2};
+            
+            UpdateGraph();
+            
+            ConstructGraphCommand = new RelayCommand(_ => UpdateGraph());
+            ShowNextIterationCommand = new RelayCommand(_ => NextIteration());
+            ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIteration());
         }
-        
+
+        private void PreviousIteration()
+        {
+            if (CurrentIterationIndex == 0)
+            {
+                CurrentIterationIndex = IterationsCount - 1;
+            }
+            else
+            {
+                --CurrentIterationIndex;
+            
+                TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
+                AdditionalDotsCoord = new List<double>() {ValuesHistory[CurrentIterationIndex].Item1, ValuesHistory[CurrentIterationIndex].Item2};
+            
+                UpdateGraph();   
+            }
+        }
+
+        private void NextIteration()
+        {
+            if (CurrentIterationIndex + 1 == IterationsCount)
+            {
+                CurrentIterationIndex = 0;
+            }
+            else
+            {
+                ++CurrentIterationIndex;
+            
+                TargetDotCoord = ValuesHistory[CurrentIterationIndex].Item3;
+                AdditionalDotsCoord = new List<double>() {ValuesHistory[CurrentIterationIndex].Item1, ValuesHistory[CurrentIterationIndex].Item2};
+            
+                UpdateGraph();   
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
