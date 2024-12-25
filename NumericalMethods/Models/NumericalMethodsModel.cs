@@ -181,7 +181,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             return (nextPointX, nextPointY);
         }
         
-        // поиск интеграла методом прямоугольников
+        // поиск интеграла методом прямоугольников (средние прямольники)
         public static List<(int, double)> RectangleMethod(Function function, double pointA, double pointB, double epsilon)
         {
             var numberOfRectangles = 1; // Начальное количество прямоугольников
@@ -199,6 +199,98 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
                 {
                     // Находим среднюю точку для текущего прямоугольника
                     var x = pointA + (i + 0.5) * width; // Средняя точка
+                    var height = SolveFunc(function, x); // Высота прямоугольника
+                    area += height * width; // Добавляем площадь текущего прямоугольника
+                }
+
+                // Сохраняем количество разбиений и соответствующую площадь
+                valuesHistory.Add((numberOfRectangles, area));
+
+                // Проверяем, достигнута ли нужная точность
+                if (Math.Abs(area - previousArea) <= epsilon)
+                {
+                    break; // Выходим из цикла, если достигнута нужная точность
+                }
+
+                // Увеличиваем количество прямоугольников для следующей итерации
+                previousArea = area; // Обновляем предыдущую площадь
+                numberOfRectangles *= 2; // Увеличиваем количество разбиений
+
+                // Предотвращаем слишком большое количество разбиений
+                if (numberOfRectangles > 10000) // Например, ограничим до 10,000
+                {
+                    throw new InvalidOperationException("Слишком большое количество разбиений. Проверьте параметры.");
+                }
+
+            } while (true); // Бесконечный цикл, но с условием выхода внутри
+
+            return valuesHistory;
+        }
+        
+        // поиск интеграла методом прямоугольников (левые прямоугольники)
+        public static List<(int, double)> LeftRectangleMethod(Function function, double pointA, double pointB, double epsilon)
+        {
+            var numberOfRectangles = 1; // Начальное количество прямоугольников
+            var valuesHistory = new List<(int, double)>();
+
+            // Инициализируем предыдущую площадь значением, отличным от текущей
+            var previousArea = double.MaxValue; // Устанавливаем в максимально возможное значение
+
+            do
+            {
+                var width = (pointB - pointA) / numberOfRectangles; // Ширина каждого прямоугольника
+                double area = 0; // Текущая площадь
+
+                for (var i = 0; i < numberOfRectangles; ++i)
+                {
+                    // Находим левую точку для текущего прямоугольника
+                    var x = pointA + i * width; // Левая точка
+                    var height = SolveFunc(function, x); // Высота прямоугольника
+                    area += height * width; // Добавляем площадь текущего прямоугольника
+                }
+
+                // Сохраняем количество разбиений и соответствующую площадь
+                valuesHistory.Add((numberOfRectangles, area));
+
+                // Проверяем, достигнута ли нужная точность
+                if (Math.Abs(area - previousArea) <= epsilon)
+                {
+                    break; // Выходим из цикла, если достигнута нужная точность
+                }
+
+                // Увеличиваем количество прямоугольников для следующей итерации
+                previousArea = area; // Обновляем предыдущую площадь
+                numberOfRectangles *= 2; // Увеличиваем количество разбиений
+
+                // Предотвращаем слишком большое количество разбиений
+                if (numberOfRectangles > 10000) // Например, ограничим до 10,000
+                {
+                    throw new InvalidOperationException("Слишком большое количество разбиений. Проверьте параметры.");
+                }
+
+            } while (true); // Бесконечный цикл, но с условием выхода внутри
+
+            return valuesHistory;
+        }
+        
+        // поиск интеграла методом прямоугольников (правые прямоугольники)
+        public static List<(int, double)> RightRectangleMethod(Function function, double pointA, double pointB, double epsilon)
+        {
+            var numberOfRectangles = 1; // Начальное количество прямоугольников
+            var valuesHistory = new List<(int, double)>();
+
+            // Инициализируем предыдущую площадь значением, отличным от текущей
+            var previousArea = double.MaxValue; // Устанавливаем в максимально возможное значение
+
+            do
+            {
+                var width = (pointB - pointA) / numberOfRectangles; // Ширина каждого прямоугольника
+                double area = 0; // Текущая площадь
+
+                for (var i = 0; i < numberOfRectangles; ++i)
+                {
+                    // Находим правую точку для текущего прямоугольника
+                    var x = pointA + (i + 1) * width; // Правая точка
                     var height = SolveFunc(function, x); // Высота прямоугольника
                     area += height * width; // Добавляем площадь текущего прямоугольника
                 }
@@ -299,7 +391,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
                     var height2 = SolveFunc(function, x2); // Высота правой стороны
 
                     // Площадь параболы
-                    area += (height0 + 4 * height1 + height2) * width / 3; // Исправлено на /3
+                    area += (height0 + 4 * height1 + height2) * width / 3;
                 }
 
                 // Сохраняем количество интервалов и соответствующую площадь

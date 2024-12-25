@@ -22,6 +22,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private bool _isNewtonMethodChecked;
         private bool _isCoordinateDescentMethodChecked;
         private bool _isRectangleMethodChecked;
+        private bool _isLeftRectangleMethodChecked;
+        private bool _isRightRectangleMethodChecked;
         private bool _isTrapezoidMethodChecked;
         private bool _isParabolaMethodChecked;
         
@@ -75,6 +77,26 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
         
+        public bool IsLeftRectangleMethodChecked
+        {
+            get => _isLeftRectangleMethodChecked;
+            set
+            {
+                _isLeftRectangleMethodChecked = value;
+                OnPropertyChanged(nameof(IsLeftRectangleMethodChecked));
+            }
+        }
+        
+        public bool IsRightRectangleMethodChecked
+        {
+            get => _isRightRectangleMethodChecked;
+            set
+            {
+                _isRightRectangleMethodChecked = value;
+                OnPropertyChanged(nameof(IsRightRectangleMethodChecked));
+            }
+        }
+        
         public bool IsTrapezoidMethodChecked
         {
             get => _isTrapezoidMethodChecked;
@@ -101,6 +123,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private string _newtonMethodResult = "";
         private string _coordinateDescentMethodResult = "";
         private string _rectangleMethodResult = "";
+        private string _rightRectangleMethodResult = "";
+        private string _leftRectangleMethodResult = "";
         private string _trapezoidMethodResult = "";
         private string _parabolaMethodResult = "";
         
@@ -153,6 +177,26 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 OnPropertyChanged(nameof(RectangleMethodResult));
             }
         }
+        
+        public string LeftRectangleMethodResult
+        {
+            get => _leftRectangleMethodResult;
+            set
+            {
+                _leftRectangleMethodResult = value;
+                OnPropertyChanged(nameof(LeftRectangleMethodResult));
+            }
+        }
+        
+        public string RightRectangleMethodResult
+        {
+            get => _rightRectangleMethodResult;
+            set
+            {
+                _rightRectangleMethodResult = value;
+                OnPropertyChanged(nameof(RightRectangleMethodResult));
+            }
+        }
 
         public string TrapezoidMethodResult
         {
@@ -181,6 +225,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private List<double> _newtonNullNullValuesHistory;
         private List<double> _newtonExtremeValuesHistory;
         private List<(int, double)> _rectangleValuesHistory;
+        private List<(int, double)> _leftRectangleValuesHistory;
+        private List<(int, double)> _rightRectangleValuesHistory;
         private List<(int, double)> _trapezoidValuesHistory;
         private List<(int, double)> _parabolaValuesHistory;
         
@@ -241,6 +287,26 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             {
                 _rectangleValuesHistory = value;
                 OnPropertyChanged(nameof(RectangleValuesHistory));
+            }
+        }
+        
+        public List<(int, double)> LeftRectangleValuesHistory
+        {
+            get => _leftRectangleValuesHistory;
+            set
+            {
+                _leftRectangleValuesHistory = value;
+                OnPropertyChanged(nameof(LeftRectangleValuesHistory));
+            }
+        }
+        
+        public List<(int, double)> RightRectangleValuesHistory
+        {
+            get => _rightRectangleValuesHistory;
+            set
+            {
+                _rightRectangleValuesHistory = value;
+                OnPropertyChanged(nameof(RightRectangleValuesHistory));
             }
         }
 
@@ -397,7 +463,21 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 RectangleValuesHistory = NumericalMethodsModel.RectangleMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
                 RectangleMethodResult = RoundItem(RectangleValuesHistory.Last().Item2, SingsAfterCommaCount).ToString();
             }
+            
+            if (IsLeftRectangleMethodChecked)
+            {
+                LeftRectangleValuesHistory = NumericalMethodsModel.LeftRectangleMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                LeftRectangleMethodResult = RoundItem(LeftRectangleValuesHistory.Last().Item2, SingsAfterCommaCount).ToString();
+            }
 
+            if (IsRightRectangleMethodChecked)
+            {
+                RightRectangleValuesHistory =
+                    NumericalMethodsModel.RightRectangleMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                RightRectangleMethodResult = RoundItem(RightRectangleValuesHistory.Last().Item2, SingsAfterCommaCount)
+                    .ToString();
+            }
+        
             if (IsTrapezoidMethodChecked)
             {
                 TrapezoidValuesHistory = NumericalMethodsModel.TrapezoidMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
@@ -442,7 +522,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         public ICommand NewtonNullShowGraphCommand { get; }
         public ICommand NewtonExtremeShowGraphCommand { get; }
         public ICommand CoordinateDescentShowGraphCommand { get; }
+        public ICommand LeftRectangleShowGraphCommand { get; }
         public ICommand RectangleShowGraphCommand { get; }
+        public ICommand RightRectangleShowGraphCommand { get; }
         public ICommand TrapezoidShowGraphCommand { get; }
         public ICommand ParabolaShowGraphCommand { get; }
 
@@ -460,8 +542,32 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             NewtonExtremeShowGraphCommand = new RelayCommand(_ => NewtonExtremeShowGraph());
             CoordinateDescentShowGraphCommand = new RelayCommand(_ => CoordinateDescentShowGraph());
             RectangleShowGraphCommand = new RelayCommand(_ => RectangleShowGraph());
+            LeftRectangleShowGraphCommand = new RelayCommand(_ => LeftRectangleShowGraph());
+            RightRectangleShowGraphCommand = new RelayCommand(_ => RightRectangleShowGraph());
             TrapezoidShowGraphCommand = new RelayCommand(_ => TrapezoidShowGraph());
             ParabolaShowGraphCommand = new RelayCommand(_ => ParabolaShowGraph());
+        }
+
+        private void LeftRectangleShowGraph()
+        {
+            if (IsRectangleMethodChecked != true) return;
+            if (RectangleMethodResult == "")
+            {
+                Calculate();
+            }
+            var graph = new Graph(LeftRectangleValuesHistory, FunctionExpression, ParameterA, ParameterB, -2);
+            graph.Show();
+        }
+        
+        private void RightRectangleShowGraph()
+        {
+            if (IsRectangleMethodChecked != true) return;
+            if (RectangleMethodResult == "")
+            {
+                Calculate();
+            }
+            var graph = new Graph(RightRectangleValuesHistory, FunctionExpression, ParameterA, ParameterB, -1);
+            graph.Show();
         }
 
         private void ParabolaShowGraph()
@@ -509,7 +615,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 // Создаем HttpClient
                 using (var client = new HttpClient())
                 {
-                    const string wolframAlphaAppId = "";
+                    const string wolframAlphaAppId = "8A9G56-7RVGA48H8H";
                     // Формируем URL-запрос к Wolfram Alpha
                     var encodedFunction = Uri.EscapeDataString(FunctionExpressionString);
                     var url = $"https://api.wolframalpha.com/v2/query?" +

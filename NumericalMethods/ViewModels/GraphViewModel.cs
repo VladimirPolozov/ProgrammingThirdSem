@@ -281,6 +281,29 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             {
                 switch (MethodCode)
                 {
+                    case -2:
+                        // Левые прямоугольники
+                        var leftX = PointA + i * width; // Левая точка
+                        var leftHeight = NumericalMethodsModel.SolveFunc(_function, leftX); // Высота прямоугольника
+
+                        polygonSeries.Points.Add(new DataPoint(leftX, 0)); // Левый нижний угол
+                        polygonSeries.Points.Add(new DataPoint(leftX, leftHeight)); // Левый верхний угол
+                        polygonSeries.Points.Add(new DataPoint(leftX + width, leftHeight)); // Правый верхний угол
+                        polygonSeries.Points.Add(new DataPoint(leftX + width, 0)); // Правый нижний угол
+                        polygonSeries.Points.Add(new DataPoint(leftX, 0)); // Замыкаем прямоугольник
+                        break;
+
+                    case -1:
+                        // Правые прямоугольники
+                        var rightX = PointA + (i + 1) * width; // Правая точка
+                        var rightHeight = NumericalMethodsModel.SolveFunc(_function, rightX); // Высота прямоугольника
+
+                        polygonSeries.Points.Add(new DataPoint(rightX, 0)); // Левый нижний угол
+                        polygonSeries.Points.Add(new DataPoint(rightX, rightHeight)); // Левый верхний угол
+                        polygonSeries.Points.Add(new DataPoint(rightX - width, rightHeight)); // Правый верхний угол
+                        polygonSeries.Points.Add(new DataPoint(rightX - width, 0)); // Правый нижний угол
+                        polygonSeries.Points.Add(new DataPoint(rightX, 0)); // Замыкаем прямоугольник
+                        break;
                     case 0:
                         // Прямоугольник
                         var x = PointA + (i + 0.5) * width; // Средняя точка

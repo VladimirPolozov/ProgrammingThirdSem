@@ -23,6 +23,8 @@
           <RowDefinition Height="24px"/>
           <RowDefinition Height="24px"/>
           <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
+          <RowDefinition Height="24px"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -34,17 +36,21 @@
         <CheckBox Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" Content="Золотого сечения" FontFamily="Montserrat" IsChecked="{Binding IsGoldenRatioMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Grid.Column="0" Grid.Row="3" VerticalContentAlignment="Center" Content="Ньютона" FontFamily="Montserrat" IsChecked="{Binding IsNewtonMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Grid.Column="0" Grid.Row="4" VerticalContentAlignment="Center" Content="Покоординатного спуска" FontFamily="Montserrat" IsChecked="{Binding IsCoordinateDescentMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Grid.Column="0" Grid.Row="5" VerticalContentAlignment="Center" Content="Прямоугольников" FontFamily="Montserrat" IsChecked="{Binding IsRectangleMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Grid.Column="0" Grid.Row="6" VerticalContentAlignment="Center" Content="Трапеций" FontFamily="Montserrat" IsChecked="{Binding IsTrapezoidMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-        <CheckBox Grid.Column="0" Grid.Row="7" VerticalContentAlignment="Center" Content="Парабол" FontFamily="Montserrat" IsChecked="{Binding IsParabolaMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        <CheckBox Grid.Column="0" Grid.Row="5" VerticalContentAlignment="Center" Content="Левых прямоугольников" FontFamily="Montserrat" IsChecked="{Binding IsLeftRectangleMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="6" VerticalContentAlignment="Center" Content="Средних прямоугольников" FontFamily="Montserrat" IsChecked="{Binding IsRectangleMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="7" VerticalContentAlignment="Center" Content="Правых прямоугольников" FontFamily="Montserrat" IsChecked="{Binding IsRightRectangleMethodChecked, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Column="0" Grid.Row="8" VerticalContentAlignment="Center" Content="Трапеций" FontFamily="Montserrat" IsChecked="{Binding IsTrapezoidMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        <CheckBox Grid.Column="0" Grid.Row="9" VerticalContentAlignment="Center" Content="Парабол" FontFamily="Montserrat" IsChecked="{Binding IsParabolaMethodChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
         <TextBlock Grid.Column="1" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">Результат</TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding DichotomyMethodResult}"/>
         <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding GoldenRatioMethodResult}"/>
         <TextBlock Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding NewtonMethodResult}"/>
         <TextBlock Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding CoordinateDescentMethodResult}"/>
-        <TextBlock Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding RectangleMethodResult}"/>
-        <TextBlock Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding TrapezoidMethodResult}"/>
-        <TextBlock Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding ParabolaMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding LeftRectangleMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding RectangleMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding RightRectangleMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="8" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding TrapezoidMethodResult}"/>
+        <TextBlock Grid.Column="1" Grid.Row="9" VerticalAlignment="Center" TextAlignment="Center" FontSize="12" FontFamily="Montserrat" Text="{Binding ParabolaMethodResult}"/>
         <TextBlock Grid.Column="2" Grid.Row="0" Margin="0 0 0 20px" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="Montserrat">График</TextBlock>
         <Button Grid.Column="2" Grid.Row="1" Content="Открыть" Command="{Binding DichotomyShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
         <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -56,9 +62,11 @@
           <Button Content="extreme" Command="{Binding NewtonExtremeShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="5px 0"/>
         </StackPanel>
         <Button Grid.Column="2" Grid.Row="4" Content="Открыть" Command="{Binding CoordinateDescentShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
-        <Button Grid.Column="2" Grid.Row="5" Content="Открыть" Command="{Binding RectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
-        <Button Grid.Column="2" Grid.Row="6" Content="Открыть" Command="{Binding TrapezoidShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
-        <Button Grid.Column="2" Grid.Row="7" Content="Открыть" Command="{Binding ParabolaShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="5" Content="Открыть" Command="{Binding LeftRectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="6" Content="Открыть" Command="{Binding RectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="7" Content="Открыть" Command="{Binding RightRectangleShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="8" Content="Открыть" Command="{Binding TrapezoidShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
+        <Button Grid.Column="2" Grid.Row="9" Content="Открыть" Command="{Binding ParabolaShowGraphCommand}" BorderThickness="0" Background="White" FontFamily="Montserrat" FontWeight="500" Margin="25px 0"/>
       </Grid>
       <Grid>
         <Grid.ColumnDefinitions>
