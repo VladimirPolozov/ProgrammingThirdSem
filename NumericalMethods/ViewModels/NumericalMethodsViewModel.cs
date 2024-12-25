@@ -5,14 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using org.mariuszgromada.math.mxparser;
 using ProgrammingThirdSem.NumericalMethods.Models;
 using ProgrammingThirdSem.NumericalMethods.Views;
-using License = org.mariuszgromada.math.mxparser.License;
 
 namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 {
@@ -98,13 +96,13 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         }
         
         // результат выполения методов
-        private string _dichotomyMethodResult;
-        private string _goldenRatioMethodResult;
-        private string _newtonMethodResult;
-        private string _coordinateDescentMethodResult;
-        private string _rectangleMethodResult;
-        private string _trapezoidMethodResult;
-        private string _parabolaMethodResult;
+        private string _dichotomyMethodResult = "";
+        private string _goldenRatioMethodResult = "";
+        private string _newtonMethodResult = "";
+        private string _coordinateDescentMethodResult = "";
+        private string _rectangleMethodResult = "";
+        private string _trapezoidMethodResult = "";
+        private string _parabolaMethodResult = "";
         
         public string DichotomyMethodResult
         {
@@ -182,9 +180,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private List<(double, double, double)> _goldenRatioMinValuesHistory;
         private List<double> _newtonNullNullValuesHistory;
         private List<double> _newtonExtremeValuesHistory;
-        private List<(double, double, double)> _rectangleValuesHistory;
-        private List<(double, double, double)> _trapezoidValuesHistory;
-        private List<(double, double, double)> _parabolaValuesHistory;
+        private List<(int, double)> _rectangleValuesHistory;
+        private List<(int, double)> _trapezoidValuesHistory;
+        private List<(int, double)> _parabolaValuesHistory;
         
         public List<(double, double, double)> DichotomyValuesHistory
         {
@@ -236,7 +234,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public List<(double, double, double)> RectangleValuesHistory
+        public List<(int, double)> RectangleValuesHistory
         {
             get => _rectangleValuesHistory;
             set
@@ -246,7 +244,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
 
-        public List<(double, double, double)> TrapezoidValuesHistory
+        public List<(int, double)> TrapezoidValuesHistory
         {
             get => _trapezoidValuesHistory;
             set
@@ -256,7 +254,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             }
         }
         
-        public List<(double, double, double)> ParabolaValuesHistory
+        public List<(int, double)> ParabolaValuesHistory
         {
             get => _parabolaValuesHistory;
             set
@@ -371,10 +369,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                     );
                 CoordinateDescentMethodResult = $"min: ({resultMinX}; {resultMinY}), max: ({resultMaxX}; {resultMaxY})";
             }
-            else
-            {
-                return;
-            }
 
             if (IsDichotomyMethodChecked)
             {
@@ -396,6 +390,24 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 NewtonExtremeValuesHistory = NumericalMethodsModel.NewtonExtremeMethod(FunctionExpression, ParameterB, Epsilon);
                 NewtonMethodResult = $"null: {RoundItem(NewtonNullValuesHistory.Last(), SingsAfterCommaCount).ToString()}; " +
                                      $"extreme: {RoundItem(NewtonExtremeValuesHistory.Last(), SingsAfterCommaCount).ToString()}";
+            }
+
+            if (IsRectangleMethodChecked)
+            {
+                RectangleValuesHistory = NumericalMethodsModel.RectangleMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                RectangleMethodResult = RoundItem(RectangleValuesHistory.Last().Item2, SingsAfterCommaCount).ToString();
+            }
+
+            if (IsTrapezoidMethodChecked)
+            {
+                TrapezoidValuesHistory = NumericalMethodsModel.TrapezoidMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                TrapezoidMethodResult = RoundItem(TrapezoidValuesHistory.Last().Item2, SingsAfterCommaCount).ToString();
+            }
+
+            if (IsParabolaMethodChecked)
+            {
+                ParabolaValuesHistory = NumericalMethodsModel.ParabolaMethod(FunctionExpression, ParameterA, ParameterB, Epsilon);
+                ParabolaMethodResult = RoundItem(ParabolaValuesHistory.Last().Item2, SingsAfterCommaCount).ToString();
             }
         }
 
@@ -421,6 +433,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         }
         
         public ICommand CalculateCommand { get; }
+        public ICommand ClearCommand { get; }
         
         // Показать график
         public ICommand DichotomyShowGraphCommand { get; }
@@ -429,13 +442,16 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         public ICommand NewtonNullShowGraphCommand { get; }
         public ICommand NewtonExtremeShowGraphCommand { get; }
         public ICommand CoordinateDescentShowGraphCommand { get; }
+        public ICommand RectangleShowGraphCommand { get; }
+        public ICommand TrapezoidShowGraphCommand { get; }
+        public ICommand ParabolaShowGraphCommand { get; }
 
         public NumericalMethodsViewModel()
         {
             // вставляем в форму данные по умолчанию
             SetDefaultData();
-
-            CalculateCommand = new RelayCommand(_ => Calculate());
+            ClearCommand = new RelayCommand(_ => SetDefaultData());
+            CalculateCommand = new RelayCommand(_ => Calculate());  
             
             DichotomyShowGraphCommand = new RelayCommand(_ => DichotomyShowGraph());
             GoldenRatioMinShowGraphCommand = new RelayCommand(_ => GoldenRatioMinShowGraph());
@@ -443,16 +459,57 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             NewtonNullShowGraphCommand = new RelayCommand(_ => NewtonNullShowGraph());
             NewtonExtremeShowGraphCommand = new RelayCommand(_ => NewtonExtremeShowGraph());
             CoordinateDescentShowGraphCommand = new RelayCommand(_ => CoordinateDescentShowGraph());
+            RectangleShowGraphCommand = new RelayCommand(_ => RectangleShowGraph());
+            TrapezoidShowGraphCommand = new RelayCommand(_ => TrapezoidShowGraph());
+            ParabolaShowGraphCommand = new RelayCommand(_ => ParabolaShowGraph());
         }
-        
+
+        private void ParabolaShowGraph()
+        {
+            if (IsParabolaMethodChecked != true) return;
+            if (ParabolaMethodResult == "")
+            {
+                Calculate();
+            }
+            var graph = new Graph(ParabolaValuesHistory, FunctionExpression, ParameterA, ParameterB, 2);
+            graph.Show();
+        }
+
+        private void TrapezoidShowGraph()
+        {
+            if (IsTrapezoidMethodChecked != true) return;
+            if (TrapezoidMethodResult == "")
+            {
+                Calculate();
+            }
+            var graph = new Graph(TrapezoidValuesHistory, FunctionExpression, ParameterA, ParameterB, 1);
+            graph.Show();
+        }
+
+        private void RectangleShowGraph()
+        {
+            if (IsRectangleMethodChecked != true) return;
+            if (RectangleMethodResult == "")
+            {
+                Calculate();
+            }
+            var graph = new Graph(RectangleValuesHistory, FunctionExpression, ParameterA, ParameterB, 0);
+            graph.Show();
+        }
+
         private async void CoordinateDescentShowGraph()
         {
+            if (IsCoordinateDescentMethodChecked != true) return;
+            if (CoordinateDescentMethodResult == "")
+            {
+                Calculate();
+            }
             try
             {
                 // Создаем HttpClient
                 using (var client = new HttpClient())
                 {
-                    var wolframAlphaAppId = "";
+                    const string wolframAlphaAppId = "";
                     // Формируем URL-запрос к Wolfram Alpha
                     var encodedFunction = Uri.EscapeDataString(FunctionExpressionString);
                     var url = $"https://api.wolframalpha.com/v2/query?" +
@@ -535,7 +592,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         private void NewtonExtremeShowGraph()
         {
-            if (NewtonExtremeValuesHistory.Count == 0)
+            if (IsNewtonMethodChecked != true) return;
+            if (NewtonMethodResult == "")
             {
                 Calculate();
             }
@@ -545,7 +603,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         private void NewtonNullShowGraph()
         {
-            if (NewtonNullValuesHistory.Count == 0)
+            if (IsNewtonMethodChecked != true) return;
+            if (NewtonMethodResult == "")
             {
                 Calculate();
             }
@@ -555,7 +614,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         private void GoldenRatioMaxShowGraph()
         {
-            if (GoldenRatioMaxValuesHistory.Count == 0)
+            if (IsGoldenRatioMethodChecked != true) return;
+            if (GoldenRatioMethodResult == "")
             {
                 Calculate();
             }
@@ -565,7 +625,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         private void GoldenRatioMinShowGraph()
         {
-            if (GoldenRatioMinValuesHistory.Count == 0)
+            if (IsGoldenRatioMethodChecked != true) return;
+            if (GoldenRatioMethodResult == "")
             {
                 Calculate();
             }
@@ -575,7 +636,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
 
         private void DichotomyShowGraph()
         {
-            if (DichotomyValuesHistory.Count == 0)
+            if (IsDichotomyMethodChecked != true) return;
+            if (DichotomyMethodResult == "")
             {
                 Calculate();
             }

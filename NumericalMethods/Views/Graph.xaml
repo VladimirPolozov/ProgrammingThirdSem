@@ -68,15 +68,7 @@
           </ComboBox>
         </StackPanel>
       </Grid>
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition/>
-          <ColumnDefinition/>
-          <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding CloseCommand}" Content="Закрыть" Margin="0 0 5 0"/>
-        <Button Grid.Column="1" Grid.ColumnSpan="2" Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Content="Обновить график" Margin="5 0 0 0"/>
-      </Grid>
+      <Button Height="30px" FontSize="12px" FontFamily="Montserrat" FontWeight="Medium" Background="#24A1DE" Foreground="White" BorderThickness="0" Command="{Binding ConstructGraphCommand}" Content="Обновить график"/>
     </StackPanel>
     <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
     <StackPanel Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 50 20 50">

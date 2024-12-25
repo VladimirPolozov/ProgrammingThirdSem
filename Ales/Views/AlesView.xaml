@@ -3,9 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ProgrammingThirdSem"
+             xmlns:viewModels="clr-namespace:ProgrammingThirdSem.Ales.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewModels:AlesViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="800">
-    <Grid>
+    <Grid Margin="24px 12px">
+        <StackPanel Orientation="Vertical">
+            <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Margin="0px 0 0 24px">
+                <Button Content="Очистить" Command="{Binding ClearCommand}" Margin="0 0 24px 0" FontFamily="Montserrat" FontSize="11px" FontWeight="600" BorderThickness="0" Background="White"/>
+                <Button Content="Загрузить из Excel" Command="{Binding LoadFromExcelCommand}" Margin="0 0 24px 0" FontFamily="Montserrat" FontSize="11px" FontWeight="600" BorderThickness="0" Background="White"/>
+                <Button Content="Рассчитать" Command="{Binding CalculateCommand}" Margin="0 0 24px 0" FontFamily="Montserrat" FontSize="11px" FontWeight="600" BorderThickness="0" Background="White"/>
+            </StackPanel>
+            <StackPanel Margin="0 0 0 25">
+                <RadioButton Content="Метод Гаусса" FontFamily="Montserrat" FontSize="12px" Command="{Binding IsGaussMethodChecked}" Margin="0 0 0 5"/>
+                <RadioButton Content="Метод Гаусса-Жордана" FontFamily="Montserrat" FontSize="12px" Command="{Binding IsJordanGaussMethodChecked}" Margin="0 0 0 5"/>
+                <RadioButton Content="Метод Крамера" FontFamily="Montserrat" FontSize="12px" Command="{Binding IsKramerMethodChecked}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

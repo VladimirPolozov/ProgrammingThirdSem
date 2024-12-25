@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using org.mariuszgromada.math.mxparser;
 using Expression = org.mariuszgromada.math.mxparser.Expression;
 
@@ -153,6 +152,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             return valuesHistory;
         }
         
+        // Поиск экстремума метод координатного спуска
         public static (double, double) CoordinateDescentMethod(string functionExpression, double pointA, double pointB, double epsilon, bool isMinimumSearched)
         {
             var middlePoint = (pointA + pointB) / 2;
@@ -179,6 +179,151 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
             } while (Math.Abs(nextPointX - pointX) > epsilon || Math.Abs(nextPointY - pointY) > epsilon);
 
             return (nextPointX, nextPointY);
+        }
+        
+        // поиск интеграла методом прямоугольников
+        public static List<(int, double)> RectangleMethod(Function function, double pointA, double pointB, double epsilon)
+        {
+            var numberOfRectangles = 1; // Начальное количество прямоугольников
+            var valuesHistory = new List<(int, double)>();
+
+            // Инициализируем предыдущую площадь значением, отличным от текущей
+            var previousArea = double.MaxValue; // Устанавливаем в максимально возможное значение
+
+            do
+            {
+                var width = (pointB - pointA) / numberOfRectangles; // Ширина каждого прямоугольника
+                double area = 0; // Текущая площадь
+
+                for (var i = 0; i < numberOfRectangles; ++i)
+                {
+                    // Находим среднюю точку для текущего прямоугольника
+                    var x = pointA + (i + 0.5) * width; // Средняя точка
+                    var height = SolveFunc(function, x); // Высота прямоугольника
+                    area += height * width; // Добавляем площадь текущего прямоугольника
+                }
+
+                // Сохраняем количество разбиений и соответствующую площадь
+                valuesHistory.Add((numberOfRectangles, area));
+
+                // Проверяем, достигнута ли нужная точность
+                if (Math.Abs(area - previousArea) <= epsilon)
+                {
+                    break; // Выходим из цикла, если достигнута нужная точность
+                }
+
+                // Увеличиваем количество прямоугольников для следующей итерации
+                previousArea = area; // Обновляем предыдущую площадь
+                numberOfRectangles *= 2; // Увеличиваем количество разбиений
+
+                // Предотвращаем слишком большое количество разбиений
+                if (numberOfRectangles > 10000) // Например, ограничим до 10,000
+                {
+                    throw new InvalidOperationException("Слишком большое количество разбиений. Проверьте параметры.");
+                }
+
+            } while (true); // Бесконечный цикл, но с условием выхода внутри
+
+            return valuesHistory;
+        }
+
+        public static List<(int, double)> TrapezoidMethod(Function function, double pointA, double pointB, double epsilon)
+        {
+            var numberOfTrapezoids = 1; // Начальное количество трапеций
+            var valuesHistory = new List<(int, double)>();
+
+            // Инициализируем предыдущую площадь значением, отличным от текущей
+            var previousArea = double.MaxValue; // Устанавливаем в максимально возможное значение
+
+            do
+            {
+                var width = (pointB - pointA) / numberOfTrapezoids; // Ширина каждой трапеции
+                double area = 0; // Текущая площадь
+
+                // Вычисляем площадь трапеций
+                for (var i = 0; i < numberOfTrapezoids; ++i)
+                {
+                    var x0 = pointA + i * width; // Левый конец трапеции
+                    var x1 = pointA + (i + 1) * width; // Правый конец трапеции
+                    var height0 = SolveFunc(function, x0); // Высота левой стороны
+                    var height1 = SolveFunc(function, x1); // Высота правой стороны
+                    area += (height0 + height1) * width / 2; // Площадь трапеции
+                }
+
+                // Сохраняем количество разбиений и соответствующую площадь
+                valuesHistory.Add((numberOfTrapezoids, area));
+
+                // Проверяем, достигнута ли нужная точность
+                if (Math.Abs(area - previousArea) <= epsilon)
+                {
+                    break; // Выходим из цикла, если достигнута нужная точность
+                }
+
+                // Увеличиваем количество трапеций для следующей итерации
+                previousArea = area; // Обновляем предыдущую площадь
+                numberOfTrapezoids *= 2; // Увеличиваем количество разбиений
+
+                // Предотвращаем слишком большое количество разбиений
+                if (numberOfTrapezoids > 10000) // Например, ограничим до 10,000
+                {
+                    throw new InvalidOperationException("Слишком большое количество разбиений. Проверьте параметры.");
+                }
+
+            } while (true); // Бесконечный цикл, но с условием выхода внутри
+
+            return valuesHistory;
+        }
+        
+        public static List<(int, double)> ParabolaMethod(Function function, double pointA, double pointB, double epsilon)
+        {
+            var numberOfIntervals = 2; // Начальное количество интервалов (должно быть четным)
+            var valuesHistory = new List<(int, double)>();
+
+            // Инициализируем предыдущую площадь значением, отличным от текущей
+            var previousArea = double.MaxValue; // Устанавливаем в максимально возможное значение
+
+            do
+            {
+                var width = (pointB - pointA) / numberOfIntervals; // Ширина каждого интервала
+                double area = 0; // Текущая площадь
+
+                // Вычисляем площадь с использованием метода Симпсона
+                for (var i = 0; i < numberOfIntervals; i += 2)
+                {
+                    var x0 = pointA + i * width; // Левый конец интервала
+                    var x1 = pointA + (i + 1) * width; // Средняя точка интервала
+                    var x2 = pointA + (i + 2) * width; // Правый конец интервала
+
+                    var height0 = SolveFunc(function, x0); // Высота левой стороны
+                    var height1 = SolveFunc(function, x1); // Высота средней точки
+                    var height2 = SolveFunc(function, x2); // Высота правой стороны
+
+                    // Площадь параболы
+                    area += (height0 + 4 * height1 + height2) * width / 3; // Исправлено на /3
+                }
+
+                // Сохраняем количество интервалов и соответствующую площадь
+                valuesHistory.Add((numberOfIntervals, area));
+
+                // Проверяем, достигнута ли нужная точность
+                if (Math.Abs(area - previousArea) <= epsilon)
+                {
+                    break; // Выходим из цикла, если достигнута нужная точность
+                }
+
+                // Увеличиваем количество интервалов для следующей итерации
+                previousArea = area; // Обновляем предыдущую площадь
+                numberOfIntervals *= 2; // Увеличиваем количество интервалов
+
+                // Предотвращаем слишком большое количество разбиений
+                if (numberOfIntervals > 10000) // Например, ограничим до 10,000
+                {
+                    throw new InvalidOperationException("Слишком большое количество интервалов. Проверьте параметры.");
+                }
+
+            } while (true); // Бесконечный цикл, но с условием выхода внутри
+
+            return valuesHistory;
         }
 
         private static double GetDerivative(Function function, double point)
