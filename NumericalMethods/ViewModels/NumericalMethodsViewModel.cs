@@ -347,7 +347,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             if (FunctionExpressionString.ToLower().Contains("x") && FunctionExpressionString.ToLower().Contains("y") &&
                 IsCoordinateDescentMethodChecked)
             {
-                var resultMinX = RoundItem(
+                var resultMinX = 
+                    RoundItem(
                     NumericalMethodsModel.CoordinateDescentMethod(
                         FunctionExpressionString, ParameterA, ParameterB, Epsilon, true
                         ).Item1, SingsAfterCommaCount

@@ -7,7 +7,7 @@ namespace ProgrammingThirdSem.Ales.Views
         public AlesView()
         {
             InitializeComponent();
-            DataContext = new AlesViewModel();
+            DataContext = new AlesViewModel(DataGridAles);
         }
     }
 }

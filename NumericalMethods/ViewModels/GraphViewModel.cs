@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Input;
 using org.mariuszgromada.math.mxparser;
@@ -20,6 +21,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private double _pointA;
         private double _pointB;
         private int _methodCode;
+        private int _currentDivisionCount;
         
         public double PointA
         {
@@ -48,6 +50,16 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             {
                 _methodCode = value;
                 OnPropertyChanged(nameof(MethodCode));
+            }
+        }
+        
+        public int CurrentDivisionCount
+        {
+            get => _currentDivisionCount;
+            set
+            {
+                _currentDivisionCount = value;
+                OnPropertyChanged(nameof(CurrentDivisionCount));
             }
         }
         
@@ -140,7 +152,6 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             set
             {
                 _iterationsCount = value;
-                IterationsInfo = $"Итерация №{CurrentIterationIndex + 1} из {IterationsCount}";
                 OnPropertyChanged(nameof(IterationsCount));
             }
         }
@@ -161,7 +172,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
         private List<(double, double, double)> ValuesHistoryTupleList { get; }
         private List<(int, double)> ValuesHistoryIntDouble { get; }
         private string _iterationsInfo;
-        private readonly Window _window;
+        private string _divisionsInfo;
 
         public string IterationsInfo
         {
@@ -170,6 +181,16 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             {
                 _iterationsInfo = value;
                 OnPropertyChanged(nameof(IterationsInfo));
+            }
+        }
+        
+        public string DivisionsInfo
+        {
+            get => _divisionsInfo;
+            set
+            {
+                _divisionsInfo = value;
+                OnPropertyChanged(nameof(DivisionsInfo));
             }
         }
 
@@ -277,23 +298,27 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             };
 
             var width = (PointB - PointA) / ValuesHistoryIntDouble[CurrentIterationIndex].Item1; // Ширина каждой трапеции
-            for (var i = 0; i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1; ++i)
+            
+            switch (MethodCode)
             {
-                switch (MethodCode)
-                {
-                    case 0:
-                        // Прямоугольник
+                case 0:
+                    // Прямоугольник
+                    for (var i = 0; i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1; ++i)
+                    {
                         var x = PointA + (i + 0.5) * width; // Средняя точка
                         var height = NumericalMethodsModel.SolveFunc(_function, x); // Высота прямоугольника
-            
+
                         polygonSeries.Points.Add(new DataPoint(x - width / 2, 0)); // Левый нижний угол
                         polygonSeries.Points.Add(new DataPoint(x - width / 2, height)); // Левый верхний угол
                         polygonSeries.Points.Add(new DataPoint(x + width / 2, height)); // Правый верхний угол
                         polygonSeries.Points.Add(new DataPoint(x + width / 2, 0)); // Правый нижний угол
                         polygonSeries.Points.Add(new DataPoint(x - width / 2, 0)); // Замыкаем прямоугольник
-                        break;
-                    case 1:
-                        // Трапеция
+                    }
+                    break;
+                case 1:
+                    // Трапеция
+                    for (var i = 0; i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1; ++i)
+                    {
                         var x0 = PointA + i * width; // Левый конец
                         var x1 = PointA + (i + 1) * width; // Правый конец
                         var height0 = NumericalMethodsModel.SolveFunc(_function, x0); // Высота левой стороны
@@ -304,17 +329,22 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                         polygonSeries.Points.Add(new DataPoint(x1, height1)); // Правый верхний угол
                         polygonSeries.Points.Add(new DataPoint(x0, height0)); // Левый верхний угол
                         polygonSeries.Points.Add(new DataPoint(x0, 0)); // Замыкаем трапецию
-                        break;
-                    case 2:    
-                        // Метод Симпсона
-                        if (i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1 - 1) // Убедимся, что не выходим за пределы массива
+                    }
+
+                    break;
+                case 2:    
+                    // Метод Симпсона
+                    for (var i = 0; i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1; i += 2)
+                    {
+                        if (i < ValuesHistoryIntDouble[CurrentIterationIndex].Item1 -
+                            1) // Убедимся, что не выходим за пределы массива
                         {
-                            x0 = PointA + i * width; // Левый конец
-                            x1 = PointA + (i + 1) * width; // Средняя точка
+                            var x0 = PointA + i * width; // Левый конец
+                            var x1 = PointA + (i + 1) * width; // Средняя точка
                             var x2 = PointA + (i + 2) * width; // Правый конец
 
-                            height0 = NumericalMethodsModel.SolveFunc(_function, x0); // Высота левой стороны
-                            height1 = NumericalMethodsModel.SolveFunc(_function, x1); // Высота средней точки
+                            var height0 = NumericalMethodsModel.SolveFunc(_function, x0); // Высота левой стороны
+                            var height1 = NumericalMethodsModel.SolveFunc(_function, x1); // Высота средней точки
                             var height2 = NumericalMethodsModel.SolveFunc(_function, x2); // Высота правой стороны
 
                             // Добавляем точки для параболы
@@ -322,8 +352,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                             for (double t = 0; t <= 1; t += 0.1) // t от 0 до 1 с шагом 0.1
                             {
                                 // Уравнение параболы: y = a(x - x0)(x - x2) + height1
-                                x = (1 - t) * x0 + t * x2; // Линейная интерполяция между x0 и x2
-                                var y = height0 * (1 - t) * (1 - t) + 2 * height1 * (1 - t) * t + height2 * t * t; // Парабола
+                                var x = (1 - t) * x0 + t * x2; // Линейная интерполяция между x0 и x2
+                                var y = height0 * (1 - t) * (1 - t) + 2 * height1 * (1 - t) * t +
+                                        height2 * t * t; // Парабола
 
                                 polygonSeries.Points.Add(new DataPoint(x, y)); // Добавляем точку на параболе
                             }
@@ -331,9 +362,16 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                             // Добавляем нижние углы
                             polygonSeries.Points.Add(new DataPoint(x2, 0)); // Правый нижний угол
                             polygonSeries.Points.Add(new DataPoint(x0, 0)); // Замыкаем параболу
+
+                            // Добавляем линии для делений
+                            polygonSeries.Points.Add(new DataPoint(x0, 0)); // Верхняя точка левого деления
+                            polygonSeries.Points.Add(new DataPoint(x0, height0)); // Нижняя точка левого деления
+                            polygonSeries.Points.Add(new DataPoint(x1, 0));
                         }
-                        break;
-                }
+                    }
+
+                    break;
+                
             }
 
             // Добавляем серии в график
@@ -395,6 +433,8 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
             ValuesHistoryIntDouble = valuesHistory;
             IterationsCount = valuesHistory.Count;
             CurrentIterationIndex = IterationsCount - 1;
+            CurrentDivisionCount = valuesHistory[CurrentIterationIndex].Item1;
+            DivisionsInfo = $"Количество разбиений: {CurrentDivisionCount}";
             ShowNextIterationCommand = new RelayCommand(_ => NextIterationPolygons());
             ShowPreviousIterationCommand = new RelayCommand(_ => PreviousIterationPolygons());
             ConstructGraphCommand = new RelayCommand(_ => DrawPolygons());
@@ -408,6 +448,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 CurrentIterationIndex = -1;
             }
             ++CurrentIterationIndex;
+            CurrentDivisionCount = ValuesHistoryIntDouble[CurrentIterationIndex].Item1;
+            DivisionsInfo = $"Количество разбиений: {CurrentDivisionCount}";
+
             DrawPolygons();
         }
 
@@ -418,6 +461,9 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 CurrentIterationIndex = IterationsCount;
             }
             --CurrentIterationIndex;
+            CurrentDivisionCount = ValuesHistoryIntDouble[CurrentIterationIndex].Item1;
+            DivisionsInfo = $"Количество разбиений: {CurrentDivisionCount}";
+
             DrawPolygons();
         }
 
@@ -428,6 +474,7 @@ namespace ProgrammingThirdSem.NumericalMethods.ViewModels
                 CurrentIterationIndex = -1;
             }
             ++CurrentIterationIndex;
+            CurrentDivisionCount = ValuesHistoryIntDouble[CurrentIterationIndex].Item1;
             TargetDotCoord = ValuesHistoryDoubleList[CurrentIterationIndex];
             UpdateGraph();
         }

@@ -299,7 +299,7 @@ namespace ProgrammingThirdSem.NumericalMethods.Models
                     var height2 = SolveFunc(function, x2); // Высота правой стороны
 
                     // Площадь параболы
-                    area += (height0 + 4 * height1 + height2) * width / 3; // Исправлено на /3
+                    area += (height0 + 4 * height1 + height2) * width / 3;
                 }
 
                 // Сохраняем количество интервалов и соответствующую площадь

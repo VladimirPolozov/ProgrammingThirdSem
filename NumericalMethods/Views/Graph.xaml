@@ -22,8 +22,13 @@
           <ColumnDefinition/>
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding IterationsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding DivisionsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 10"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="12px" FontFamily="Montserrat" FontWeight="SemiBold" Text="{Binding IterationsInfo, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
           <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&lt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Margin="0 0 4 0" Command="{Binding ShowPreviousIterationCommand}"/>
           <Button FontSize="16px" FontFamily="Montserrat" FontWeight="Bold" Content="&gt;" Background="#24A1DE" Foreground="White" BorderThickness="0" Padding="10px 4px" Command="{Binding ShowNextIterationCommand}"/>
         </StackPanel>
